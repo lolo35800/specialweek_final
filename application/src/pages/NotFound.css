@@ -1,0 +1,41 @@
+.page-notfound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 80px 24px;
+  text-align: center;
+}
+
+.notfound-emoji {
+  font-size: 64px;
+}
+
+.page-notfound h1 {
+  font-size: 80px;
+  font-weight: 900;
+  color: var(--accent);
+  margin: 0;
+}
+
+.page-notfound p {
+  font-size: 18px;
+  color: var(--text);
+}
+
+.page-notfound .btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  background: var(--accent);
+  color: #fff;
+  transition: opacity 0.15s;
+}
+
+.page-notfound .btn:hover {
+  opacity: 0.85;
+}

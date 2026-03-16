@@ -1,0 +1,94 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "texte": "Quel indice visuel trahit souvent une image générée par IA ?",
+      "options": ["Une résolution trop haute", "Des mains avec un nombre anormal de doigts", "Des couleurs trop vives", "Un fond blanc"],
+      "bonne_reponse": 1,
+      "explication": "Les IA génératives ont du mal à reproduire correctement les mains humaines, qui apparaissent souvent avec trop ou pas assez de doigts.",
+      "categorie": "deepfake",
+      "difficulte": "facile"
+    },
+    {
+      "id": 2,
+      "texte": "Pourquoi les fake news se propagent-elles si vite sur les réseaux sociaux ?",
+      "options": ["Parce qu'elles sont vraies", "Parce que les algorithmes favorisent les contenus choquants", "Parce qu'elles sont en anglais", "Parce que les journalistes les partagent"],
+      "bonne_reponse": 1,
+      "explication": "Les algorithmes des réseaux sociaux privilégient l'engagement. Les contenus qui provoquent de fortes émotions génèrent plus d'interactions et sont donc plus diffusés.",
+      "categorie": "fake_news",
+      "difficulte": "facile"
+    },
+    {
+      "id": 3,
+      "texte": "Qu'est-ce qu'un deepfake ?",
+      "options": ["Un filtre photo classique", "Une vidéo ou image manipulée par IA pour faire dire ou faire des choses à quelqu'un", "Un réseau social secret", "Un type de virus informatique"],
+      "bonne_reponse": 1,
+      "explication": "Un deepfake utilise des algorithmes d'apprentissage profond pour superposer le visage ou la voix d'une personne sur un autre corps ou contexte, de manière très réaliste.",
+      "categorie": "deepfake",
+      "difficulte": "moyen"
+    },
+    {
+      "id": 4,
+      "texte": "Quelle est la première chose à faire face à une info surprenante ?",
+      "options": ["La partager immédiatement", "La liker", "Chercher d'autres sources fiables", "L'imprimer"],
+      "bonne_reponse": 2,
+      "explication": "Avant de partager une information, il est essentiel de vérifier qu'elle est relayée par plusieurs sources indépendantes et fiables.",
+      "categorie": "sources",
+      "difficulte": "facile"
+    },
+    {
+      "id": 5,
+      "texte": "L'IA peut-elle générer de faux articles de presse convaincants ?",
+      "options": ["Non, c'est impossible", "Oui, et ils peuvent être difficiles à distinguer des vrais", "Seulement en anglais", "Seulement des titres, pas des articles complets"],
+      "bonne_reponse": 1,
+      "explication": "Les grands modèles de langage (LLM) peuvent générer des articles entiers avec un style journalistique très convaincant, inventant des faits, des citations et des sources.",
+      "categorie": "ia",
+      "difficulte": "moyen"
+    },
+    {
+      "id": 6,
+      "texte": "Quel outil permet de vérifier l'origine d'une image ?",
+      "options": ["Google Maps", "Google Images (recherche inversée)", "Google Translate", "Google Drive"],
+      "bonne_reponse": 1,
+      "explication": "La recherche d'images inversée de Google (ou TinEye) permet de trouver d'où provient une image et de voir si elle a été utilisée dans d'autres contextes.",
+      "categorie": "sources",
+      "difficulte": "facile"
+    },
+    {
+      "id": 7,
+      "texte": "Qu'est-ce que le 'cherry-picking' dans la désinformation ?",
+      "options": ["Choisir des cerises au supermarché", "Ne sélectionner que les faits qui confirment une idée préconçue", "Partager uniquement des bonnes nouvelles", "Inventer des statistiques"],
+      "bonne_reponse": 1,
+      "explication": "Le cherry-picking consiste à ne sélectionner que les données ou faits qui soutiennent une thèse, en ignorant tout ce qui la contredit.",
+      "categorie": "fake_news",
+      "difficulte": "difficile"
+    },
+    {
+      "id": 8,
+      "texte": "Un titre très émotionnel ('SCANDALE !', 'CHOQUANT !') est souvent un signe de :",
+      "options": ["Information de qualité", "Contenu potentiellement clickbait ou manipulateur", "Article scientifique", "Communication officielle"],
+      "bonne_reponse": 1,
+      "explication": "Les titres alarmistes sont une technique de clickbait visant à provoquer une réaction immédiate et à pousser au partage sans vérifier l'article.",
+      "categorie": "fake_news",
+      "difficulte": "facile"
+    },
+    {
+      "id": 9,
+      "texte": "Quelle technologie est utilisée pour créer des voix synthétiques réalistes ?",
+      "options": ["Le Bluetooth", "La synthèse vocale par IA (voice cloning)", "Le Wi-Fi 6", "La 5G"],
+      "bonne_reponse": 1,
+      "explication": "Des outils d'IA peuvent reproduire la voix d'une personne à partir de quelques secondes d'enregistrement, créant des enregistrements audio entièrement faux.",
+      "categorie": "deepfake",
+      "difficulte": "moyen"
+    },
+    {
+      "id": 10,
+      "texte": "Parmi ces sites, lequel est un fact-checker reconnu en France ?",
+      "options": ["4chan", "Les Décodeurs (Le Monde)", "Reddit", "Twitter/X"],
+      "bonne_reponse": 1,
+      "explication": "Les Décodeurs est le service de vérification des faits du journal Le Monde. AFP Factuel et Libération CheckNews sont aussi reconnus.",
+      "categorie": "sources",
+      "difficulte": "moyen"
+    }
+  ]
+}

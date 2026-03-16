@@ -1,0 +1,35 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "titre": "Photo de manifestation — générée par IA",
+      "type": "image",
+      "image_url": "",
+      "zones_suspectes": [
+        { "x": 8, "y": 12, "w": 18, "h": 20, "description": "Visages flous et traits incohérents" },
+        { "x": 65, "y": 50, "w": 15, "h": 25, "description": "Main avec trop de doigts" }
+      ],
+      "indices": [
+        "Les visages en arrière-plan sont flous et déformés",
+        "Certaines mains présentent un nombre anormal de doigts",
+        "L'arrière-plan présente des motifs répétitifs"
+      ],
+      "explication": "Cette image a été générée par un modèle de diffusion. Les IA ont du mal à reproduire fidèlement les foules et les mains humaines."
+    },
+    {
+      "id": 2,
+      "titre": "Post viral — texte généré par IA",
+      "type": "post",
+      "image_url": "",
+      "zones_suspectes": [
+        { "x": 5, "y": 5, "w": 90, "h": 15, "description": "Titre émotionnel conçu pour choquer" }
+      ],
+      "indices": [
+        "Titre utilisant des majuscules et des points d'exclamation",
+        "Aucune date ni auteur mentionné",
+        "Source inconnue ou URL suspecte"
+      ],
+      "explication": "Ce post utilise les techniques classiques de désinformation : titre émotionnel, absence de source, et appel à l'action urgent."
+    }
+  ]
+}

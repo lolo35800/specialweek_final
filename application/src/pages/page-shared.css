@@ -1,0 +1,54 @@
+/* Shared styles imported by all pages */
+
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-emoji {
+  font-size: 48px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--text-h);
+}
+
+.page-subtitle {
+  color: var(--text);
+  font-size: 18px;
+  margin: 0;
+  max-width: 520px;
+}
+
+/* Placeholder blocks for pages not yet implemented */
+.lessons-grid .lesson-placeholder,
+.gallery-placeholder,
+.quiz-placeholder,
+.dashboard-placeholder,
+.regles-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 80px 24px;
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  color: var(--text);
+  font-size: 16px;
+}
+
+.lessons-grid .lesson-placeholder span,
+.gallery-placeholder span,
+.quiz-placeholder span,
+.dashboard-placeholder span,
+.regles-placeholder span {
+  font-size: 48px;
+}

@@ -1,0 +1,31 @@
+{
+  "lessons": [
+    {
+      "id": "ia-intro",
+      "titre": "C'est quoi l'IA ?",
+      "description": "Comprendre comment fonctionne l'intelligence artificielle générative.",
+      "contenu": "L'intelligence artificielle générative est un type de système informatique capable de produire du texte, des images, du son ou de la vidéo de façon autonome. Elle apprend à partir de milliards d'exemples existants et peut en créer de nouveaux qui ressemblent à des contenus réels. Des outils comme ChatGPT, Midjourney ou Stable Diffusion en sont des exemples célèbres.",
+      "ordre": 1,
+      "duree_min": 5,
+      "icone": "🤖"
+    },
+    {
+      "id": "fake-news",
+      "titre": "Qu'est-ce qu'une fake news ?",
+      "description": "Identifier une fausse information et comprendre pourquoi elle se propage.",
+      "contenu": "Une fake news est une information fausse ou trompeuse présentée comme vraie. Avec l'IA, il est désormais possible de créer des textes, images et vidéos très réalistes qui n'ont jamais existé. La désinformation se propage rapidement sur les réseaux sociaux car notre cerveau est attiré par les contenus choquants ou surprenants — les algorithmes amplifient ce phénomène.",
+      "ordre": 2,
+      "duree_min": 5,
+      "icone": "📰"
+    },
+    {
+      "id": "reperer",
+      "titre": "Comment repérer un contenu douteux ?",
+      "description": "Les indices visuels et logiques qui trahissent un contenu généré par IA.",
+      "contenu": "Plusieurs indices permettent de repérer un contenu suspect : des doigts mal formés sur les images, des ombres incohérentes, un style d'écriture trop parfait, l'absence de source vérifiable, une URL inconnue, ou encore un titre très émotionnel conçu pour provoquer une réaction rapide sans réflexion.",
+      "ordre": 3,
+      "duree_min": 5,
+      "icone": "🔍"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "rules": [
+    {
+      "id": 1,
+      "titre": "Vérifie la source",
+      "description": "Est-ce un média connu et fiable ? Y a-t-il une signature d'auteur identifiable ?",
+      "icone": "🔎"
+    },
+    {
+      "id": 2,
+      "titre": "Cherche d'autres sources",
+      "description": "Si c'est vrai, d'autres médias sérieux en parlent aussi. Une seule source = prudence.",
+      "icone": "📡"
+    },
+    {
+      "id": 3,
+      "titre": "Regarde la date",
+      "description": "Une vieille information peut être ressortie hors contexte pour manipuler l'opinion.",
+      "icone": "📅"
+    },
+    {
+      "id": 4,
+      "titre": "Méfie-toi de tes émotions",
+      "description": "Si l'info te choque ou t'énerve très fort, c'est peut-être fait exprès pour te faire partager sans réfléchir.",
+      "icone": "❤️"
+    },
+    {
+      "id": 5,
+      "titre": "Vérifie les images",
+      "description": "Utilise la recherche d'images inversée de Google ou TinEye pour vérifier l'origine d'une photo.",
+      "icone": "🖼️"
+    }
+  ]
+}
