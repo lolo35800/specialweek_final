@@ -1,5 +1,22 @@
 .claude
 CLAUDE.md
 
+# Python
+__pycache__/
 *.pyc
+*.pyo
+
+# Node
+application/node_modules/
+application/dist/
+application/dist-ssr/
+
+# Env
+application/.env
+application/.env.*
+
+# OS
 .DS_Store
+
+# Divers
+files/
