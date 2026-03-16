@@ -1,0 +1,22 @@
+.masonry-grid {
+  columns: var(--columns, 3) 280px;
+  column-gap: 16px;
+  padding: 16px;
+}
+
+.masonry-grid > * {
+  break-inside: avoid;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 900px) {
+  .masonry-grid {
+    columns: 2 240px;
+  }
+}
+
+@media (max-width: 520px) {
+  .masonry-grid {
+    columns: 1;
+  }
+}

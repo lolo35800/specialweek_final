@@ -1,0 +1,231 @@
+.post-detail {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px;
+  min-height: 80vh;
+}
+
+.post-detail-loading,
+.post-detail-notfound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 60vh;
+  color: var(--text-muted);
+}
+
+.post-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.post-detail-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.post-detail-username {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.post-detail-username:hover {
+  color: var(--primary-light);
+}
+
+/* Intro */
+.post-detail-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  padding: 40px 0;
+}
+
+.post-detail-intro h1 {
+  font-size: clamp(24px, 4vw, 40px);
+}
+
+.post-detail-desc {
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 520px;
+}
+
+.post-detail-stats {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.post-detail-start {
+  font-size: 16px;
+  padding: 14px 40px;
+  border-radius: 999px;
+}
+
+/* Quiz */
+.post-detail-quiz {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.quiz-progress {
+  height: 4px;
+  background: var(--bg-elevated);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.quiz-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.quiz-counter {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.quiz-question {
+  font-size: clamp(18px, 3vw, 24px);
+  line-height: 1.4;
+  color: var(--text-h);
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.quiz-option:hover:not(:disabled) {
+  border-color: var(--primary-border);
+  background: var(--primary-bg);
+  color: var(--text-h);
+}
+
+.quiz-option.correct {
+  border-color: var(--success);
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.quiz-option.wrong {
+  border-color: var(--danger);
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.quiz-option.dim {
+  opacity: 0.4;
+}
+
+.quiz-option-letter {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.quiz-feedback {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.correct-text { color: var(--success); font-weight: 700; font-size: 16px; }
+.wrong-text { color: var(--danger); font-weight: 700; font-size: 16px; }
+
+.quiz-explication {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Results */
+.post-detail-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 48px 0;
+  text-align: center;
+}
+
+.results-score-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--primary-bg);
+  border: 3px solid var(--primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--glow-primary);
+}
+
+.results-score-num {
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--primary-light);
+  line-height: 1;
+}
+
+.results-score-total {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.results-msg {
+  font-size: 16px;
+  color: var(--text-muted);
+}
+
+.results-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
