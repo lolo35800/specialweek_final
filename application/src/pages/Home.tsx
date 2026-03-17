@@ -1,119 +1,166 @@
 import { Link } from 'react-router-dom'
-import { MasonryGrid } from '../components/masonry/MasonryGrid'
+import { ACTUS } from '../data/actus'
+import { CLES } from '../data/cles'
 import './Home.css'
 
-const CARDS = [
+const JEUX = [
   {
-    id: 'deepfake',
-    to: '/jouer',
-    tag: 'Jeu',
-    title: 'Deepfake ou réel ?',
-    body: 'Une image, une vidéo, un son — est-ce une création IA ou un vrai document ? Entraîne ton œil.',
-    size: 'tall',
-    accent: true,
+    to: '/jouer/quiz',
+    label: 'Quiz',
+    desc: '10 questions chrono sur la désinformation',
+    niveau: 'Tous niveaux',
   },
   {
-    id: 'stats',
-    to: '/comprendre/ia-generative-risques',
-    tag: 'Chiffre',
-    title: '500 millions de deepfakes',
-    body: 'créés en 2023 à travers le monde. Un toutes les 5 minutes.',
-    size: 'short',
-    accent: false,
+    to: '/jouer/fake-ou-reel',
+    label: 'Fake ou réel ?',
+    desc: "Image générée ou vraie photo ? À toi de juger.",
+    niveau: 'Collège / Lycée',
   },
   {
-    id: 'biais',
-    to: '/comprendre/biais-cognitifs',
-    tag: 'Clé pédagogique',
-    title: 'Pourquoi notre cerveau se fait piéger',
-    body: "Les biais cognitifs exploités par la désinformation — et comment s'en protéger.",
-    size: 'medium',
-    accent: false,
-  },
-  {
-    id: 'quiz',
-    to: '/feed',
-    tag: 'Quiz',
-    title: 'Teste tes connaissances',
-    body: "Des centaines de quiz créés par la communauté sur la désinformation, les médias et l'IA.",
-    size: 'short',
-    accent: false,
-  },
-  {
-    id: 'regles',
-    to: '/regles',
-    tag: 'Méthode',
-    title: 'Les 5 règles contre la désinformation',
-    body: 'Pause. Source. Contexte. Recoupement. Slow news. Cinq habitudes qui changent tout.',
-    size: 'medium',
-    accent: false,
-  },
-  {
-    id: 'reconnaitre',
-    to: '/comprendre/reconnaitre-deepfakes',
-    tag: 'Guide',
-    title: 'Reconnaître un deepfake en 30 secondes',
-    body: 'Yeux, contours, mains, lumière — les indices visuels à chercher en premier.',
-    size: 'tall',
-    accent: false,
-  },
-  {
-    id: 'verifier',
-    to: '/comprendre/verifier-sources',
-    tag: 'Méthode',
-    title: 'Vérifier une source en 3 minutes',
-    body: 'La méthode SIFT expliquée simplement.',
-    size: 'short',
-    accent: false,
-  },
-  {
-    id: 'create',
-    to: '/create',
-    tag: 'Contribuer',
-    title: 'Crée ton propre quiz',
-    body: "Partage tes connaissances avec la communauté. Chaque quiz créé aide quelqu'un à mieux s'informer.",
-    size: 'medium',
-    accent: true,
+    to: '/jouer/spot-the-zone',
+    label: 'Spot the Zone',
+    desc: "Repère les zones retouchées dans une image.",
+    niveau: 'Lycée',
   },
 ]
 
 export default function Home() {
+  const une = ACTUS.filter(a => a.une)
+  const autres = ACTUS.filter(a => !a.une)
+
   return (
     <div className="home-page">
 
-      {/* === Intro de sensibilisation === */}
-      <div className="home-intro">
-        <div className="home-intro-tag">Sensibilisation à l'IA</div>
-        <h1 className="home-intro-title">
-          L'IA peut créer n'importe quoi.<br />
-          <span className="gradient-text">Apprends à ne plus te faire avoir.</span>
-        </h1>
-        <p className="home-intro-body">
-          Deepfakes, faux articles, citations inventées, images générées — les contenus fabriqués par l'IA inondent internet.
-          VériIA te donne les outils pour les reconnaître, les décrypter et développer ton esprit critique.
-        </p>
-        <div className="home-intro-cta">
-          <Link to="/comprendre" className="btn btn-primary">Commencer</Link>
-          <Link to="/jouer" className="btn btn-outline">Jouer directement</Link>
+      {/* ── HERO ─────────────────────────────────── */}
+      <section className="home-hero">
+        <div className="home-hero-content">
+          <div className="home-hero-tag">Portail pédagogique</div>
+          <h1 className="home-hero-title">
+            Comprends l'IA.<br />
+            <span className="gradient-text">Ne te laisse plus avoir.</span>
+          </h1>
+          <p className="home-hero-sub">
+            Cours, jeux et actus pour apprendre à détecter la désinformation —
+            spécialement conçu pour les collégiens et lycéens.
+          </p>
+          <div className="home-hero-cta">
+            <Link to="/comprendre" className="btn btn-primary home-btn-primary">Voir les cours</Link>
+            <Link to="/jouer" className="btn btn-outline home-btn-outline">Jouer</Link>
+          </div>
         </div>
-      </div>
+        <div className="home-hero-stat">
+          <div className="home-stat-block">
+            <span className="home-stat-num">500M</span>
+            <span className="home-stat-label">deepfakes créés en 2023</span>
+          </div>
+          <div className="home-stat-block">
+            <span className="home-stat-num">76%</span>
+            <span className="home-stat-label">des 15-24 ans ont partagé une fausse info</span>
+          </div>
+          <div className="home-stat-block">
+            <span className="home-stat-num">3 min</span>
+            <span className="home-stat-label">suffisent pour vérifier une source</span>
+          </div>
+        </div>
+      </section>
 
-      {/* === Grille masonry === */}
-      <div className="home-grid-label">Explorer</div>
-      <MasonryGrid columns={3}>
-        {CARDS.map(card => (
-          <Link
-            key={card.id}
-            to={card.to}
-            className={`home-card home-card--${card.size} ${card.accent ? 'home-card--accent' : ''}`}
-          >
-            <span className="home-card-tag">{card.tag}</span>
-            <h2 className="home-card-title">{card.title}</h2>
-            <p className="home-card-body">{card.body}</p>
-            <span className="home-card-arrow">→</span>
-          </Link>
-        ))}
-      </MasonryGrid>
+      {/* ── ACTUS ────────────────────────────────── */}
+      <section className="home-section">
+        <div className="home-section-header">
+          <h2 className="home-section-title">Actus</h2>
+          <span className="home-section-sub">IA & désinformation dans les médias</span>
+        </div>
+
+        {/* Cartes "à la une" — grandes, en haut */}
+        <div className="home-actus-une">
+          {une.map(actu => (
+            <Link key={actu.id} to={actu.lien} className="home-actu-card home-actu-card--une">
+              <div className="home-actu-top">
+                <span className="home-actu-cat">{actu.categorie}</span>
+                <span className="home-actu-une-badge">À la une</span>
+              </div>
+              <h3 className="home-actu-titre">{actu.titre}</h3>
+              <p className="home-actu-resume">{actu.resume}</p>
+              <div className="home-actu-footer">
+                <span className="home-actu-source">{actu.source}</span>
+                <span className="home-actu-date">{actu.date}</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Autres actus — en dessous, tailles variées */}
+        <div className="home-actus-autres">
+          {autres.map((actu, i) => (
+            <Link
+              key={actu.id}
+              to={actu.lien}
+              className={`home-actu-card home-actu-card--other home-actu-card--s${(i % 3) + 1}`}
+            >
+              <div className="home-actu-top">
+                <span className="home-actu-cat">{actu.categorie}</span>
+              </div>
+              <h3 className="home-actu-titre">{actu.titre}</h3>
+              <p className="home-actu-resume">{actu.resume}</p>
+              <div className="home-actu-footer">
+                <span className="home-actu-source">{actu.source}</span>
+                <span className="home-actu-date">{actu.date}</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ── COURS ────────────────────────────────── */}
+      <section className="home-section">
+        <div className="home-section-header">
+          <h2 className="home-section-title">Cours</h2>
+          <Link to="/comprendre" className="home-section-link">Voir tout →</Link>
+        </div>
+
+        <div className="home-cours-grid">
+          {CLES.map((cle, i) => (
+            <Link key={cle.slug} to={`/comprendre/${cle.slug}`} className={`home-cours-card ${i === 0 ? 'home-cours-card--featured' : ''}`}>
+              <div className="home-cours-top">
+                <span className="home-cours-duree">{cle.duree}</span>
+                <span className="home-cours-sections">{cle.sections.length} parties</span>
+              </div>
+              <h3 className="home-cours-titre">{cle.titre}</h3>
+              <p className="home-cours-accroche">{cle.accroche}</p>
+              <span className="home-cours-arrow">Lire →</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ── JEUX ─────────────────────────────────── */}
+      <section className="home-section">
+        <div className="home-section-header">
+          <h2 className="home-section-title">Jeux</h2>
+          <Link to="/jouer" className="home-section-link">Voir tout →</Link>
+        </div>
+
+        <div className="home-jeux-grid">
+          {JEUX.map(jeu => (
+            <Link key={jeu.to} to={jeu.to} className="home-jeu-card">
+              <span className="home-jeu-niveau">{jeu.niveau}</span>
+              <h3 className="home-jeu-label">{jeu.label}</h3>
+              <p className="home-jeu-desc">{jeu.desc}</p>
+              <span className="home-jeu-cta">Jouer →</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ── CTA COMMUNAUTÉ ───────────────────────── */}
+      <section className="home-community">
+        <h2>Contribue à la communauté</h2>
+        <p>Crée tes propres quiz et aide d'autres élèves à développer leur esprit critique.</p>
+        <div className="home-community-btns">
+          <Link to="/feed" className="btn btn-outline home-btn-outline">Voir le feed</Link>
+          <Link to="/create" className="btn btn-primary home-btn-primary">Créer un quiz</Link>
+        </div>
+      </section>
 
     </div>
   )

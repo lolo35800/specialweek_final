@@ -14,6 +14,7 @@ application/dist-ssr/
 # Env
 application/.env
 application/.env.*
+application/env
 
 # OS
 .DS_Store
