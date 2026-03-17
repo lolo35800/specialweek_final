@@ -14,6 +14,54 @@
   box-shadow: var(--shadow);
 }
 
+.comparison-block {
+  margin-bottom: 18px;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.comparison-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.comparison-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.comparison-image {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.comparison-card figure {
+  margin: 0;
+}
+
+.comparison-card figcaption {
+  text-align: center;
+  padding-top: 4px;
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .comparison-images {
+    grid-template-columns: 1fr;
+  }
+}
+
 .quiz-meta {
   display: flex;
   justify-content: space-between;

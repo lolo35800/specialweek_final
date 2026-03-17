@@ -1,1 +1,12 @@
-{"scores": []}
+{
+  "scores": [
+    {
+      "id": "106fe0f7-a134-44e7-a83a-631e456b543d",
+      "username": "Anonyme",
+      "score": 0,
+      "total": 10,
+      "module": "quiz",
+      "timestamp": "2026-03-17T11:31:58.413242"
+    }
+  ]
+}
