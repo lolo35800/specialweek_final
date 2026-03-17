@@ -1,152 +1,180 @@
-.home {
-  display: flex;
-  flex-direction: column;
-  gap: 64px;
+.home-page {
+  padding-bottom: 80px;
 }
 
-/* Hero */
-.hero {
+/* =====================
+   INTRO DE SENSIBILISATION
+   ===================== */
+.home-intro {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 56px 24px 48px;
   display: flex;
   flex-direction: column;
+  gap: 20px;
+}
+
+.home-intro-tag {
+  display: inline-flex;
   align-items: center;
-  text-align: center;
-  padding: 48px 0;
-  gap: 16px;
-}
-
-.hero-badge {
-  display: inline-block;
   padding: 4px 14px;
-  border-radius: 99px;
-  background: var(--accent-bg);
-  color: var(--accent);
-  font-size: 13px;
-  font-weight: 600;
-  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  background: var(--primary-bg);
+  border: 1px solid var(--primary-border);
+  color: #fca311;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  width: fit-content;
 }
 
-.hero-title {
-  font-size: 52px;
-  font-weight: 800;
+.home-intro-title {
+  font-size: clamp(30px, 5vw, 52px);
+  font-weight: 900;
   line-height: 1.1;
+  letter-spacing: -1.5px;
   color: var(--text-h);
-  margin: 0;
 }
 
-.hero-accent {
-  color: var(--accent);
+.home-intro-body {
+  font-size: clamp(15px, 2vw, 18px);
+  color: var(--text-muted);
+  line-height: 1.7;
+  max-width: 640px;
 }
 
-.hero-subtitle {
-  max-width: 560px;
-  color: var(--text);
-  font-size: 18px;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.hero-cta {
+.home-intro-cta {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 8px;
+  padding-top: 4px;
 }
 
-/* Modules grid */
-.section-title {
-  text-align: center;
-  font-size: 28px;
+.home-intro-cta .btn-primary {
+  background: #fca311;
+  color: #14213d;
   font-weight: 700;
-  color: var(--text-h);
-  margin-bottom: 24px;
+  padding: 12px 28px;
+  font-size: 15px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+.home-intro-cta .btn-primary:hover {
+  background: #ffb733;
+  color: #14213d;
 }
 
-.module-card {
+.home-intro-cta .btn-outline {
+  padding: 12px 28px;
+  font-size: 15px;
+}
+
+/* =====================
+   LABEL "EXPLORER"
+   ===================== */
+.home-grid-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0 24px 8px;
+}
+
+/* =====================
+   CARDS MASONRY
+   ===================== */
+.home-card {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 28px;
-  border-radius: 16px;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
   text-decoration: none;
-  transition: transform 0.15s, box-shadow 0.15s;
-  position: relative;
-  overflow: hidden;
+  color: inherit;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
-.module-card:hover {
+.home-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow);
+  border-color: var(--primary-border);
+  box-shadow: var(--glow-primary), var(--shadow-card);
+  color: inherit;
 }
 
-.module-blue   { background: #e0f2fe; color: #0369a1; }
-.module-purple { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); }
-.module-orange { background: #fff7ed; color: #c2410c; }
-.module-green  { background: #f0fdf4; color: #15803d; }
+/* Hauteurs variables pour l'effet masonry */
+.home-card--short  { min-height: 140px; }
+.home-card--medium { min-height: 200px; }
+.home-card--tall   { min-height: 280px; }
 
-.module-emoji {
-  font-size: 32px;
+/* Carte accent (ambre) */
+.home-card--accent {
+  background: linear-gradient(135deg, #14213d 60%, #1e3a5f);
+  border-color: var(--primary-border);
 }
 
-.module-title {
-  font-size: 20px;
-  font-weight: 700;
-  margin: 0;
+.home-card--accent .home-card-tag {
+  color: #fca311;
+  background: rgba(252, 163, 17, 0.15);
+  border-color: rgba(252, 163, 17, 0.3);
 }
 
-.module-description {
-  font-size: 14px;
-  line-height: 1.5;
-  margin: 0;
-  opacity: 0.85;
+.home-card--accent .home-card-arrow {
+  color: #fca311;
 }
 
-.module-arrow {
-  font-size: 20px;
-  font-weight: 700;
-  margin-top: auto;
-  padding-top: 8px;
-}
-
-/* Buttons */
-.btn {
-  display: inline-block;
-  padding: 12px 24px;
-  border-radius: 10px;
-  text-decoration: none;
+.home-card-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 11px;
   font-weight: 600;
-  font-size: 16px;
-  transition: opacity 0.15s, transform 0.15s;
+  letter-spacing: 0.04em;
+  width: fit-content;
 }
 
-.btn:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+.home-card-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-h);
+  line-height: 1.3;
+  flex: 1;
 }
 
-.btn-primary {
-  background: var(--accent);
-  color: #fff;
+.home-card-body {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
 }
 
-.btn-secondary {
-  background: var(--accent-bg);
-  color: var(--accent);
-  border: 1px solid var(--accent-border);
+.home-card-arrow {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-top: auto;
+  transition: color 0.15s, transform 0.15s;
 }
 
+.home-card:hover .home-card-arrow {
+  color: #fca311;
+  transform: translateX(4px);
+}
+
+/* =====================
+   RESPONSIVE
+   ===================== */
 @media (max-width: 640px) {
-  .hero-title {
-    font-size: 32px;
+  .home-intro {
+    padding: 32px 16px 32px;
   }
 
-  .grid {
-    grid-template-columns: 1fr;
+  .home-grid-label {
+    padding: 0 16px 8px;
   }
 }

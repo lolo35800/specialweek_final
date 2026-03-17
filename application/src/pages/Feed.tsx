@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import type { Post } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { getPosts } from '../services/postService'
@@ -14,10 +14,12 @@ type PostWithProfile = Post & {
 
 export default function Feed() {
   const { user } = useAuth()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [posts, setPosts] = useState<PostWithProfile[]>([])
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'all' | 'quiz' | 'fake_or_real'>('all')
+  const [search, setSearch] = useState(searchParams.get('q') ?? '')
 
   useEffect(() => {
     async function load() {
@@ -48,7 +50,17 @@ export default function Feed() {
     })
   }
 
-  const filtered = filter === 'all' ? posts : posts.filter(p => p.type === filter)
+  const filtered = posts
+    .filter(p => filter === 'all' || p.type === filter)
+    .filter(p => {
+      if (!search.trim()) return true
+      const q = search.toLowerCase()
+      return (
+        p.title.toLowerCase().includes(q) ||
+        (p.description ?? '').toLowerCase().includes(q) ||
+        p.profiles.username.toLowerCase().includes(q)
+      )
+    })
 
   return (
     <div className="feed-page">
@@ -64,6 +76,28 @@ export default function Feed() {
             + Créer un post
           </Link>
         )}
+      </div>
+
+      <div className="feed-search-wrap">
+        <div className="feed-search">
+          <svg className="feed-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          <input
+            className="feed-search-input"
+            type="text"
+            placeholder="Rechercher un post, un auteur..."
+            value={search}
+            onChange={e => {
+              setSearch(e.target.value)
+              setSearchParams(e.target.value ? { q: e.target.value } : {}, { replace: true })
+            }}
+          />
+          {search && (
+            <button className="feed-search-clear" onClick={() => { setSearch(''); setSearchParams({}, { replace: true }) }}>✕</button>
+          )}
+        </div>
       </div>
 
       <div className="feed-filters">

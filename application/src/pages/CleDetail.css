@@ -1,0 +1,223 @@
+/* === Barre de progression de lecture === */
+.read-progress-bar {
+  position: fixed;
+  top: 56px; /* hauteur de la navbar */
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--bg-elevated);
+  z-index: 99;
+}
+
+.read-progress-fill {
+  height: 100%;
+  background: #fca311;
+  transition: width 0.1s linear;
+  border-radius: 0 2px 2px 0;
+}
+
+/* === Page === */
+.cle-detail-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 24px 80px;
+}
+
+.cle-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.cle-back-btn {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.cle-back-btn:hover {
+  color: #fca311;
+}
+
+.cle-detail-duree {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* === Layout === */
+.cle-detail-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+/* === Sommaire === */
+.cle-sommaire {
+  position: sticky;
+  top: 80px;
+}
+
+.cle-sommaire-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* Jauge + items côte à côte */
+.cle-sommaire-progress-wrap {
+  display: flex;
+  gap: 0;
+}
+
+/* Track vertical */
+.cle-sommaire-track {
+  position: relative;
+  width: 3px;
+  flex-shrink: 0;
+  background: var(--border);
+  border-radius: 2px;
+  margin-right: 12px;
+}
+
+.cle-sommaire-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #fca311;
+  border-radius: 2px;
+  transition: height 0.15s linear;
+  min-height: 3px;
+}
+
+/* Label % qui suit le bas de la jauge */
+.cle-sommaire-pct {
+  position: absolute;
+  left: 10px;
+  transform: translateY(-50%);
+  font-size: 11px;
+  font-weight: 700;
+  color: #fca311;
+  white-space: nowrap;
+  transition: top 0.15s linear;
+  background: var(--bg-card);
+  padding: 1px 4px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.cle-sommaire-items {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cle-sommaire-item {
+  display: block;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all 0.15s;
+  line-height: 1.4;
+  margin-bottom: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.cle-sommaire-item:hover {
+  color: var(--text-h);
+  background: var(--bg-elevated);
+}
+
+.cle-sommaire-item.active {
+  color: #fca311;
+  background: var(--primary-bg);
+}
+
+/* === Article === */
+.cle-article-title {
+  font-size: clamp(24px, 4vw, 38px);
+  font-weight: 800;
+  color: var(--text-h);
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.cle-article-accroche {
+  font-size: 17px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* === Sections === */
+.cle-section {
+  margin-bottom: 48px;
+  scroll-margin-top: 80px;
+}
+
+.cle-section-titre {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-h);
+  margin-bottom: 16px;
+  padding-left: 14px;
+  border-left: 3px solid #fca311;
+}
+
+.cle-section-contenu {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cle-section-contenu p {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.75;
+}
+
+.cle-section-contenu strong {
+  color: var(--text-h);
+  font-weight: 600;
+}
+
+.cle-article-footer {
+  margin-top: 64px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+.cle-not-found {
+  text-align: center;
+  padding: 80px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: var(--text-muted);
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .cle-detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .cle-sommaire {
+    display: none;
+  }
+
+  .cle-detail-page {
+    padding: 16px 16px 100px;
+  }
+}

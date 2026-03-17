@@ -13,7 +13,7 @@ export default function BottomNav() {
       <nav className="bottom-nav">
         <NavLink to="/" end className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
           <span className="bottom-nav-icon">⌂</span>
-          <span className="bottom-nav-label">Feed</span>
+          <span className="bottom-nav-label">Accueil</span>
         </NavLink>
 
         <NavLink to="/comprendre" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
