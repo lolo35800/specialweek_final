@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ACTUS } from '../data/actus'
 import { CLES } from '../data/cles'
@@ -25,8 +26,22 @@ const JEUX = [
 ]
 
 export default function Home() {
-  const une = ACTUS.filter(a => a.une)
-  const autres = ACTUS.filter(a => !a.une)
+  const [actus, setActus] = useState(ACTUS)
+
+  useEffect(() => {
+    fetch('http://localhost:8000/actus')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.length > 0) {
+          setActus(data)
+        }
+      })
+      .catch(err => console.error("Could not fetch actus:", err))
+  }, [])
+
+  const une = actus.filter(a => a.une)
+  // Show only 3 "autres" articles on the home page
+  const autres = actus.filter(a => !a.une).slice(0, 3)
 
   return (
     <div className="home-page">
@@ -69,6 +84,7 @@ export default function Home() {
         <div className="home-section-header">
           <h2 className="home-section-title">Actus</h2>
           <span className="home-section-sub">IA & désinformation dans les médias</span>
+          <Link to="/actus" className="home-section-link">Voir tout →</Link>
         </div>
 
         {/* Cartes "à la une" — grandes, en haut */}

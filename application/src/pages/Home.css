@@ -20,12 +20,12 @@
 
 .home-hero-tag {
   display: inline-flex;
-  padding: 4px 14px;
+  padding: 5px 16px;
   border-radius: 999px;
   background: var(--primary-bg);
   border: 1px solid var(--primary-border);
   color: #fca311;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -33,7 +33,7 @@
 }
 
 .home-hero-title {
-  font-size: clamp(32px, 5vw, 56px);
+  font-size: clamp(36px, 5vw, 62px);
   font-weight: 900;
   line-height: 1.08;
   letter-spacing: -1.5px;
@@ -42,7 +42,7 @@
 }
 
 .home-hero-sub {
-  font-size: clamp(15px, 2vw, 18px);
+  font-size: clamp(17px, 2vw, 21px);
   color: var(--text-muted);
   line-height: 1.7;
   max-width: 560px;
@@ -60,14 +60,14 @@
   background: #fca311 !important;
   color: #14213d !important;
   font-weight: 700;
-  padding: 12px 28px;
-  font-size: 15px;
+  padding: 14px 32px;
+  font-size: 17px;
 }
 .home-btn-primary:hover { background: #ffb733 !important; color: #14213d !important; }
 
 .home-btn-outline {
-  padding: 12px 28px;
-  font-size: 15px;
+  padding: 14px 32px;
+  font-size: 17px;
 }
 
 /* Stats */
@@ -91,7 +91,7 @@
 .home-stat-block:last-child { border-right: none; }
 
 .home-stat-num {
-  font-size: clamp(22px, 3vw, 32px);
+  font-size: clamp(26px, 3vw, 38px);
   font-weight: 900;
   color: #fca311;
   letter-spacing: -1px;
@@ -99,7 +99,7 @@
 }
 
 .home-stat-label {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-muted);
   line-height: 1.4;
 }
@@ -122,20 +122,20 @@
 }
 
 .home-section-title {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 800;
   color: var(--text-h);
   letter-spacing: -0.5px;
 }
 
 .home-section-sub {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-muted);
 }
 
 .home-section-link {
   margin-left: auto;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: #fca311;
   text-decoration: none;
@@ -193,7 +193,7 @@
 }
 
 .home-actu-cat {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -201,26 +201,26 @@
 }
 
 .home-actu-une-badge {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   background: var(--primary-bg);
   color: #fca311;
   border: 1px solid var(--primary-border);
   border-radius: 999px;
-  padding: 2px 8px;
+  padding: 3px 10px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .home-actu-titre {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--text-h);
   line-height: 1.35;
 }
 
 .home-actu-resume {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-muted);
   line-height: 1.6;
   flex: 1;
@@ -229,7 +229,7 @@
 .home-actu-footer {
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-muted);
   margin-top: 4px;
 }
@@ -278,29 +278,29 @@
 }
 
 .home-cours-duree {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   color: #fca311;
   background: var(--primary-bg);
   border: 1px solid var(--primary-border);
   border-radius: 999px;
-  padding: 2px 10px;
+  padding: 3px 12px;
 }
 
 .home-cours-sections {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-muted);
 }
 
 .home-cours-titre {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--text-h);
   line-height: 1.3;
 }
 
 .home-cours-accroche {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-muted);
   line-height: 1.55;
   flex: 1;
@@ -311,7 +311,7 @@
 }
 
 .home-cours-arrow {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   color: #fca311;
   margin-top: 4px;
@@ -347,7 +347,7 @@
 }
 
 .home-jeu-niveau {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.07em;
@@ -355,21 +355,21 @@
 }
 
 .home-jeu-label {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 800;
   color: var(--text-h);
   letter-spacing: -0.5px;
 }
 
 .home-jeu-desc {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-muted);
   line-height: 1.55;
   flex: 1;
 }
 
 .home-jeu-cta {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   color: #fca311;
   margin-top: auto;
@@ -396,13 +396,13 @@
 }
 
 .home-community h2 {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 800;
   color: var(--text-h);
 }
 
 .home-community p {
-  font-size: 15px;
+  font-size: 17px;
   color: var(--text-muted);
   max-width: 480px;
 }

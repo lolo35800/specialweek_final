@@ -31,7 +31,7 @@
 }
 
 .cle-back-btn {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-muted);
   text-decoration: none;
@@ -43,7 +43,7 @@
 }
 
 .cle-detail-duree {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-muted);
 }
 
@@ -62,7 +62,7 @@
 }
 
 .cle-sommaire-title {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -102,7 +102,7 @@
   position: absolute;
   left: 10px;
   transform: translateY(-50%);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   color: #fca311;
   white-space: nowrap;
@@ -121,8 +121,8 @@
 
 .cle-sommaire-item {
   display: block;
-  padding: 8px 10px;
-  font-size: 13px;
+  padding: 9px 12px;
+  font-size: 15px;
   color: var(--text-muted);
   text-decoration: none;
   transition: all 0.15s;
@@ -143,7 +143,7 @@
 
 /* === Article === */
 .cle-article-title {
-  font-size: clamp(24px, 4vw, 38px);
+  font-size: clamp(28px, 4vw, 44px);
   font-weight: 800;
   color: var(--text-h);
   line-height: 1.15;
@@ -151,7 +151,7 @@
 }
 
 .cle-article-accroche {
-  font-size: 17px;
+  font-size: 19px;
   color: var(--text-muted);
   line-height: 1.7;
   margin-bottom: 48px;
@@ -166,7 +166,7 @@
 }
 
 .cle-section-titre {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--text-h);
   margin-bottom: 16px;
@@ -181,7 +181,7 @@
 }
 
 .cle-section-contenu p {
-  font-size: 15px;
+  font-size: 17px;
   color: var(--text);
   line-height: 1.75;
 }

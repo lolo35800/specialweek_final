@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import content, quiz, scores, ai_mock, rules
+from app.routers import content, quiz, scores, ai_mock, rules, actus
 
 app = FastAPI(
     title="VériIA API",
@@ -24,6 +24,7 @@ app.include_router(quiz.router)
 app.include_router(scores.router)
 app.include_router(ai_mock.router)
 app.include_router(rules.router)
+app.include_router(actus.router)
 
 
 @app.get("/", tags=["health"])
