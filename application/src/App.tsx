@@ -5,6 +5,8 @@ import Feed from './pages/Feed'
 import Comprendre from './pages/Comprendre'
 import Jouer from './pages/Jouer'
 import Quiz from './pages/Quiz'
+import FakeOrReal from './pages/FakeOrReal'
+import SpotTheZone from './pages/SpotTheZone'
 import ReglesAntiDesinfo from './pages/ReglesAntiDesinfo'
 import PostDetail from './pages/PostDetail'
 import CreatePost from './pages/CreatePost'
@@ -28,6 +30,8 @@ export default function App() {
             <Route path="comprendre" element={<Comprendre />} />
             <Route path="jouer" element={<Jouer />} />
             <Route path="jouer/quiz" element={<Quiz />} />
+            <Route path="jouer/fake-ou-reel" element={<FakeOrReal />} />
+            <Route path="jouer/spot-the-zone" element={<SpotTheZone />} />
             <Route path="regles" element={<ReglesAntiDesinfo />} />
             <Route path="*" element={<NotFound />} />
           </Route>
