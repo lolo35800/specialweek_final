@@ -22,7 +22,7 @@
 
 ## Hugo — Fullstack
 - [x] Implémenter `Quiz.tsx` + `useQuiz.ts` : logique complète (question courante, score)
-- [ ] Créer `QuizQuestion.tsx` : affichage question + 4 options
-- [ ] Créer `QuizScore.tsx` : écran fin avec score, recap, bouton replay
-- [ ] Timer 30s par question avec `ProgressBar`
+- [x] Créer `QuizQuestion.tsx` : affichage question + 4 options
+- [x] Créer `QuizScore.tsx` : écran fin avec score, recap, bouton replay
+- [x] Timer 30s par question avec `ProgressBar`
 - [ ] Fetch questions depuis API (fallback automatique si API down)

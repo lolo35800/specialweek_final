@@ -1,6 +1,7 @@
 export interface Actu {
   id: string
   date: string
+  timestamp: number
   categorie: string
   titre: string
   resume: string

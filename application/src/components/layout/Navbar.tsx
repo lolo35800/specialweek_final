@@ -27,6 +27,9 @@ export default function Navbar() {
           <span className="brand-text">VériIA</span>
         </NavLink>
 
+        <div className="navbar-links" style={{ display: 'flex', gap: '20px', marginLeft: '32px', flex: 1 }}>
+        </div>
+
         <div className="navbar-auth">
           {user ? (
             <div className="navbar-user" ref={profileRef}>

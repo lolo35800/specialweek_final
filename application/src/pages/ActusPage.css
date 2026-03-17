@@ -1,0 +1,214 @@
+.actus-page {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 48px 24px 80px;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.actus-header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.actus-title {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 900;
+  color: var(--text-h);
+  letter-spacing: -1px;
+}
+
+.actus-sub {
+  font-size: 16px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-top: 12px;
+}
+
+.actus-filters-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  position: sticky;
+  top: 80px; /* Below navbar */
+  z-index: 10;
+  backdrop-filter: blur(12px);
+  background: rgba(26, 30, 41, 0.85);
+}
+
+.actus-filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.actus-search-input {
+  flex: 1;
+  min-width: 250px;
+  padding: 12px 16px;
+  background: var(--bg-dark);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.actus-search-input:focus {
+  border-color: #fca311;
+  box-shadow: 0 0 0 2px rgba(252, 163, 17, 0.1);
+}
+
+.actus-filters-controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.actus-select {
+  padding: 12px 36px 12px 16px;
+  background: var(--bg-dark);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.actus-select:focus {
+  border-color: #fca311;
+  box-shadow: 0 0 0 2px rgba(252, 163, 17, 0.1);
+}
+
+.actus-select option {
+  background: #1a1e29;
+  color: #ffffff;
+  padding: 10px;
+}
+
+.actus-loading {
+  text-align: center;
+  padding: 60px 0;
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+.actus-empty {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  font-size: 16px;
+}
+
+.actus-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.actus-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.actus-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary-border);
+  box-shadow: var(--shadow-card);
+}
+
+.actus-card-top {
+  display: flex;
+  align-items: center;
+}
+
+.actus-card-cat {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #fca311;
+  background: var(--primary-bg);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--primary-border);
+}
+
+.actus-card-titre {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-h);
+  line-height: 1.4;
+}
+
+.actus-card-resume {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.actus-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.actus-card-source {
+  font-weight: 600;
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .actus-filters-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .actus-search-input {
+    width: 100%;
+  }
+
+  .actus-filters-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .actus-filters-controls {
+    grid-template-columns: 1fr;
+  }
+}
