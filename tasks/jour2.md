@@ -21,7 +21,7 @@
 - [ ] Tester `POST /scores` + `GET /scores` avec données réelles
 
 ## Hugo — Fullstack
-- [ ] Implémenter `Quiz.tsx` + `useQuiz.ts` : logique complète (question courante, score)
+- [x] Implémenter `Quiz.tsx` + `useQuiz.ts` : logique complète (question courante, score)
 - [ ] Créer `QuizQuestion.tsx` : affichage question + 4 options
 - [ ] Créer `QuizScore.tsx` : écran fin avec score, recap, bouton replay
 - [ ] Timer 30s par question avec `ProgressBar`

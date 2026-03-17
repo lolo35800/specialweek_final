@@ -27,8 +27,10 @@ def submit_score(payload: SubmitScorePayload) -> Score:
 
 
 @router.get('')
-def get_leaderboard(limit: int = 10):
+def get_leaderboard(limit: int = 10, module: str | None = None):
     scores = _read_scores()
+    if module:
+        scores = [s for s in scores if s['module'] == module]
     sorted_scores = sorted(scores, key=lambda s: s['score'], reverse=True)
     return {'scores': sorted_scores[:limit]}
 
