@@ -77,13 +77,13 @@ export default function Feed() {
           className={`feed-filter-btn ${filter === 'quiz' ? 'active' : ''}`}
           onClick={() => setFilter('quiz')}
         >
-          🧠 Quiz
+          Quiz
         </button>
         <button
           className={`feed-filter-btn ${filter === 'fake_or_real' ? 'active' : ''}`}
           onClick={() => setFilter('fake_or_real')}
         >
-          🕵️ Vrai ou IA
+          Vrai ou IA
         </button>
       </div>
 

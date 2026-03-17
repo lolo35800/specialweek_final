@@ -12,12 +12,12 @@ export default function BottomNav() {
     <>
       <nav className="bottom-nav">
         <NavLink to="/" end className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
-          <span className="bottom-nav-icon">🏠</span>
+          <span className="bottom-nav-icon">⌂</span>
           <span className="bottom-nav-label">Feed</span>
         </NavLink>
 
         <NavLink to="/comprendre" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
-          <span className="bottom-nav-icon">🧠</span>
+          <span className="bottom-nav-icon">✦</span>
           <span className="bottom-nav-label">Apprendre</span>
         </NavLink>
 
@@ -32,7 +32,7 @@ export default function BottomNav() {
         )}
 
         <NavLink to="/regles" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
-          <span className="bottom-nav-icon">📋</span>
+          <span className="bottom-nav-icon">≡</span>
           <span className="bottom-nav-label">Règles</span>
         </NavLink>
 
@@ -51,7 +51,7 @@ export default function BottomNav() {
           </NavLink>
         ) : (
           <button className="bottom-nav-item" onClick={() => setShowAuth(true)}>
-            <span className="bottom-nav-icon">👤</span>
+            <span className="bottom-nav-icon">○</span>
             <span className="bottom-nav-label">Connexion</span>
           </button>
         )}
