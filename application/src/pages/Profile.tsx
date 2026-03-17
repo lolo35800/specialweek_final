@@ -20,12 +20,17 @@ export default function Profile() {
   useEffect(() => {
     if (!username) return
     async function load() {
-      const p = await getProfileByUsername(username!)
-      if (!p) { setLoading(false); return }
-      setProfile(p)
-      const userPosts = await getPostsByUser(p.id)
-      setPosts(userPosts as PostWithProfile[])
-      setLoading(false)
+      try {
+        const p = await getProfileByUsername(username!)
+        if (!p) { setLoading(false); return }
+        setProfile(p)
+        const userPosts = await getPostsByUser(p.id)
+        setPosts(userPosts as PostWithProfile[])
+      } catch (e) {
+        console.error('Erreur chargement profil:', e)
+      } finally {
+        setLoading(false)
+      }
     }
     load()
   }, [username])

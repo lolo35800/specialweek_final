@@ -22,16 +22,22 @@ export default function Feed() {
   useEffect(() => {
     async function load() {
       setLoading(true)
-      const [postsData, likedData] = await Promise.all([
-        getPosts(),
-        user ? getLikedPostIds(user.id) : Promise.resolve([]),
-      ])
-      setPosts(postsData as PostWithProfile[])
-      setLikedIds(new Set(likedData))
-      setLoading(false)
+      try {
+        const [postsData, likedData] = await Promise.all([
+          getPosts(),
+          user ? getLikedPostIds(user.id) : Promise.resolve([]),
+        ])
+        setPosts(postsData as PostWithProfile[])
+        setLikedIds(new Set(likedData))
+      } catch (e) {
+        console.error('Erreur chargement posts:', e)
+        setPosts([])
+      } finally {
+        setLoading(false)
+      }
     }
     load()
-  }, [user])
+  }, [user?.id])
 
   function handleLikeToggle(postId: string, liked: boolean) {
     setLikedIds(prev => {
@@ -71,13 +77,13 @@ export default function Feed() {
           className={`feed-filter-btn ${filter === 'quiz' ? 'active' : ''}`}
           onClick={() => setFilter('quiz')}
         >
-          🧠 Quiz
+          Quiz
         </button>
         <button
           className={`feed-filter-btn ${filter === 'fake_or_real' ? 'active' : ''}`}
           onClick={() => setFilter('fake_or_real')}
         >
-          🕵️ Vrai ou IA
+          Vrai ou IA
         </button>
       </div>
 

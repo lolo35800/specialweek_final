@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import type { Post, QuizContent } from '../lib/supabase'
+import type { Post, QuizContent, FakeOrRealContent } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { getPostById, recordPlay } from '../services/postService'
 import './PostDetail.css'
@@ -16,11 +16,13 @@ export default function PostDetail() {
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
 
-  // Quiz state
   const [step, setStep] = useState<'intro' | 'playing' | 'results'>('intro')
+  // Quiz state
   const [currentQ, setCurrentQ] = useState(0)
   const [selected, setSelected] = useState<number | null>(null)
   const [answers, setAnswers] = useState<{ selected: number; correct: boolean }[]>([])
+  // Fake or Real state
+  const [forGuess, setForGuess] = useState<boolean | null>(null)
   const startTime = useRef<number>(0)
 
   useEffect(() => {
@@ -32,12 +34,21 @@ export default function PostDetail() {
     })
   }, [id])
 
-  function startQuiz() {
+  function startGame() {
     setStep('playing')
     setCurrentQ(0)
     setAnswers([])
     setSelected(null)
+    setForGuess(null)
     startTime.current = Date.now()
+  }
+
+  function handleForGuess(guess: boolean) {
+    if (!post || forGuess !== null) return
+    setForGuess(guess)
+    const correct = guess === (post.content as FakeOrRealContent).is_real
+    const durationS = Math.round((Date.now() - startTime.current) / 1000)
+    recordPlay(post.id, correct ? 1 : 0, 1, user?.id, durationS)
   }
 
   function handleAnswer(optionIndex: number) {
@@ -105,9 +116,61 @@ export default function PostDetail() {
             <span>▶ {post.plays_count} parties</span>
             {isQuiz && <span>🧠 {questions.length} questions</span>}
           </div>
-          <button className="btn btn-primary post-detail-start" onClick={startQuiz}>
+          <button className="btn btn-primary post-detail-start" onClick={startGame}>
             Commencer !
           </button>
+        </div>
+      )}
+
+      {step === 'playing' && !isQuiz && (
+        <div className="post-detail-for">
+          {(() => {
+            const content = post.content as FakeOrRealContent
+            const correct = forGuess === content.is_real
+            return (
+              <>
+                <div className="for-image-wrap">
+                  <img src={content.image_url} alt="À identifier" className="for-image" />
+                </div>
+
+                {forGuess === null ? (
+                  <>
+                    <p className="for-question">Cette image est-elle vraie ou générée par IA ?</p>
+                    <div className="for-choices">
+                      <button className="for-btn for-real" onClick={() => handleForGuess(true)}>
+                        📷 Vraie photo
+                      </button>
+                      <button className="for-btn for-ia" onClick={() => handleForGuess(false)}>
+                        🤖 Générée par IA
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="for-reveal">
+                    <p className={correct ? 'correct-text' : 'wrong-text'} style={{ fontSize: 20 }}>
+                      {correct ? '✅ Bonne réponse !' : '❌ Mauvaise réponse'}
+                    </p>
+                    <p className="for-answer">
+                      Cette image est : <strong>{content.is_real ? '📷 une vraie photo' : '🤖 générée par IA'}</strong>
+                    </p>
+                    <p className="quiz-explication">{content.explication}</p>
+                    {content.indices.length > 0 && (
+                      <div className="for-indices">
+                        <p className="for-indices-title">Indices :</p>
+                        <ul>
+                          {content.indices.map((ind, i) => <li key={i}>{ind}</li>)}
+                        </ul>
+                      </div>
+                    )}
+                    <div className="results-actions">
+                      <button className="btn btn-outline" onClick={startGame}>Rejouer</button>
+                      <Link to="/" className="btn btn-primary">Retour au feed</Link>
+                    </div>
+                  </div>
+                )}
+              </>
+            )
+          })()}
         </div>
       )}
 
@@ -167,7 +230,7 @@ export default function PostDetail() {
               : '💪 Continue, tu progresses !'}
           </p>
           <div className="results-actions">
-            <button className="btn btn-outline" onClick={startQuiz}>Rejouer</button>
+            <button className="btn btn-outline" onClick={startGame}>Rejouer</button>
             <Link to="/" className="btn btn-primary">Retour au feed</Link>
           </div>
         </div>
