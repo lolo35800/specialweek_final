@@ -1,8 +1,9 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { updateProfile, isUsernameAvailable } from '../services/profileService'
 import { uploadImage } from '../services/storageService'
+import { enrollMfa, verifyEnrollment, unenrollMfa, getMfaStatus } from '../services/mfaService'
 import { supabase } from '../lib/supabase'
 import './EditProfile.css'
 
@@ -18,10 +19,28 @@ export default function EditProfile() {
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
+  // 2FA state
+  const [mfaEnrolled, setMfaEnrolled] = useState(false)
+  const [mfaFactorId, setMfaFactorId] = useState<string | null>(null)
+  const [mfaStep, setMfaStep] = useState<'idle' | 'qr' | 'verify'>('idle')
+  const [mfaQr, setMfaQr] = useState('')
+  const [mfaSecret, setMfaSecret] = useState('')
+  const [mfaTempFactorId, setMfaTempFactorId] = useState('')
+  const [mfaCode, setMfaCode] = useState('')
+  const [mfaError, setMfaError] = useState<string | null>(null)
+  const [mfaLoading, setMfaLoading] = useState(false)
+
   const [error, setError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [success, setSuccess] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    getMfaStatus().then(({ enrolled, factorId }) => {
+      setMfaEnrolled(enrolled)
+      setMfaFactorId(factorId)
+    })
+  }, [])
 
   if (!user || !profile) {
     return (
@@ -39,6 +58,39 @@ export default function EditProfile() {
     setAvatarFile(file)
     setAvatarPreview(URL.createObjectURL(file))
     setError(null)
+  }
+
+  async function startMfaEnroll() {
+    setMfaError(null)
+    setMfaLoading(true)
+    const { qr, secret, factorId, error } = await enrollMfa()
+    if (error) { setMfaError(error); setMfaLoading(false); return }
+    setMfaQr(qr)
+    setMfaSecret(secret)
+    setMfaTempFactorId(factorId)
+    setMfaStep('qr')
+    setMfaLoading(false)
+  }
+
+  async function confirmMfaEnroll() {
+    if (mfaCode.length !== 6) return
+    setMfaError(null)
+    setMfaLoading(true)
+    const { error } = await verifyEnrollment(mfaTempFactorId, mfaCode)
+    if (error) { setMfaError(error); setMfaLoading(false); return }
+    setMfaEnrolled(true)
+    setMfaFactorId(mfaTempFactorId)
+    setMfaStep('idle')
+    setMfaCode('')
+    setMfaLoading(false)
+  }
+
+  async function disableMfa() {
+    if (!mfaFactorId || !confirm('Désactiver la double authentification ?')) return
+    setMfaLoading(true)
+    const { error } = await unenrollMfa(mfaFactorId)
+    if (error) { setMfaError(error) } else { setMfaEnrolled(false); setMfaFactorId(null) }
+    setMfaLoading(false)
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -188,6 +240,62 @@ export default function EditProfile() {
               autoComplete="new-password"
             />
           </div>
+        </div>
+
+        {/* Double authentification */}
+        <div className="create-section">
+          <h3>Double authentification (2FA)</h3>
+
+          {mfaEnrolled ? (
+            <div className="mfa-active">
+              <p className="mfa-status on">🔐 2FA activée</p>
+              <p className="edit-profile-hint">Ton compte est protégé par une application d'authentification.</p>
+              <button type="button" className="btn btn-danger" onClick={disableMfa} disabled={mfaLoading}>
+                {mfaLoading ? 'Désactivation...' : 'Désactiver la 2FA'}
+              </button>
+            </div>
+          ) : mfaStep === 'idle' ? (
+            <div className="mfa-inactive">
+              <p className="mfa-status off">⚠️ 2FA désactivée</p>
+              <p className="edit-profile-hint">Ajoute une couche de sécurité supplémentaire avec Google Authenticator, Authy ou similaire.</p>
+              <button type="button" className="btn btn-outline" onClick={startMfaEnroll} disabled={mfaLoading}>
+                {mfaLoading ? 'Chargement...' : 'Activer la 2FA'}
+              </button>
+            </div>
+          ) : (
+            <div className="mfa-setup">
+              <p className="edit-profile-hint">1. Scanne ce QR code avec ton application d'authentification</p>
+              {mfaQr && <img src={mfaQr} alt="QR Code 2FA" className="mfa-qr" />}
+              <details className="mfa-secret-details">
+                <summary>Afficher la clé manuelle</summary>
+                <code className="mfa-secret">{mfaSecret}</code>
+              </details>
+              <p className="edit-profile-hint" style={{ marginTop: 16 }}>2. Entre le code à 6 chiffres affiché</p>
+              <div className="auth-field">
+                <input
+                  className="input auth-mfa-input"
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={6}
+                  value={mfaCode}
+                  onChange={e => setMfaCode(e.target.value.replace(/\D/g, ''))}
+                  placeholder="000000"
+                  autoComplete="one-time-code"
+                />
+              </div>
+              {mfaError && <p className="auth-error">{mfaError}</p>}
+              <div style={{ display: 'flex', gap: 10 }}>
+                <button type="button" className="btn btn-primary" onClick={confirmMfaEnroll}
+                  disabled={mfaLoading || mfaCode.length !== 6}>
+                  {mfaLoading ? 'Vérification...' : 'Confirmer'}
+                </button>
+                <button type="button" className="btn btn-ghost" onClick={() => { setMfaStep('idle'); setMfaCode('') }}>
+                  Annuler
+                </button>
+              </div>
+            </div>
+          )}
+          {mfaError && mfaStep === 'idle' && <p className="auth-error">{mfaError}</p>}
         </div>
 
         {error && <p className="auth-error">{error}</p>}

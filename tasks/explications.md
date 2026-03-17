@@ -1,4 +1,38 @@
-# Ce qu'on a fait et pourquoi — Jour 1
+# Ce qu'on a fait et pourquoi — VériIA
+
+---
+
+## 🚀 Lancer le projet
+
+### Frontend (React)
+```bash
+cd application
+npm install        # une seule fois
+npm run dev        # démarre sur http://localhost:5173 (ou 5174)
+```
+
+### Backend (FastAPI)
+```bash
+cd backend
+python3 -m venv venv          # une seule fois
+source venv/bin/activate      # Linux/Mac
+# venv\Scripts\activate       # Windows
+pip install -r requirements.txt  # une seule fois
+uvicorn app.main:app --reload --port 8000
+# Doc API dispo sur http://localhost:8000/docs
+```
+
+### Variables d'environnement (application/.env)
+```
+VITE_API_URL=http://localhost:8000
+VITE_SUPABASE_URL=https://rfszhsapbmzjjetxdfou.supabase.co
+VITE_SUPABASE_ANON_KEY=<clé anon Supabase>
+```
+> Ce fichier est dans `.gitignore` — ne jamais le commiter.
+
+---
+
+## Architecture actuelle (Jour 1)
 
 Ce fichier explique les choix techniques faits durant le Jour 1, pour que toute l'équipe comprenne la structure du projet.
 
@@ -163,18 +197,41 @@ Ce fichier est dans le `.gitignore` (il ne sera pas pushé sur Git) car il peut 
 ```
 Navigateur
     │
-    ├─ React (application/)
+    ├─ React (application/)  :5173
     │      │
-    │      ├─ src/services/api.ts          → fetch vers :8000
-    │      ├─ src/data/fallback.ts         → données statiques si API down
-    │      └─ localStorage                 → scores + progression locale
+    │      ├─ src/lib/supabase.ts          → client Supabase (auth + DB)
+    │      ├─ src/contexts/AuthContext.tsx → gestion session utilisateur
+    │      ├─ src/services/postService.ts  → CRUD posts (Supabase)
+    │      ├─ src/services/likeService.ts  → likes (Supabase)
+    │      ├─ src/services/storageService.ts → upload images (Supabase Storage)
+    │      ├─ src/services/api.ts          → fetch vers :8000 (contenu statique)
+    │      └─ src/data/fallback.ts         → données statiques si API down
     │
-    └─ FastAPI (backend/)
-           │
+    ├─ Supabase (cloud)
+    │      ├─ Auth                         → comptes + sessions
+    │      ├─ PostgreSQL                   → profiles, posts, likes, play_sessions
+    │      └─ Storage (post-images)        → images uploadées par les users
+    │
+    └─ FastAPI (backend/)  :8000
            ├─ /content/lessons             → lessons.json
            ├─ /content/gallery             → gallery.json
            ├─ /quiz/questions              → questions.json
-           ├─ /scores                      → scores.json
            ├─ /rules                       → rules.json
            └─ /ai/analyze                  → logique mock en Python
 ```
+
+---
+
+## Pages disponibles
+
+| URL | Description |
+|-----|-------------|
+| `/` | Feed Pinterest — tous les posts |
+| `/post/:id` | Jouer au quiz d'un post |
+| `/create` | Créer un quiz ou un défi Vrai/IA |
+| `/profile/:username` | Profil utilisateur |
+| `/settings` | Modifier son profil (avatar, pseudo, mdp) |
+| `/admin` | Panel admin (role admin requis) |
+| `/comprendre` | Leçons pédagogiques |
+| `/jouer` | Hub des mini-jeux |
+| `/regles` | Les 5 règles anti-désinformation |

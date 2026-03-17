@@ -67,6 +67,67 @@
   color: var(--text-muted);
 }
 
+/* 2FA */
+.mfa-status {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+.mfa-status.on { color: var(--success); }
+.mfa-status.off { color: var(--warning); }
+
+.mfa-active, .mfa-inactive, .mfa-setup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mfa-qr {
+  width: 180px;
+  height: 180px;
+  border-radius: var(--radius-sm);
+  background: white;
+  padding: 8px;
+}
+
+.mfa-secret-details {
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.mfa-secret {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  word-break: break-all;
+  padding: 8px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  color: var(--accent-light);
+}
+
+.auth-mfa-input {
+  font-size: 24px;
+  letter-spacing: 8px;
+  text-align: center;
+  font-weight: 700;
+  max-width: 200px;
+}
+
+.auth-mfa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  text-align: center;
+}
+
+.auth-mfa-icon {
+  font-size: 48px;
+}
+
 .edit-profile-success {
   font-size: 14px;
   color: var(--success);
