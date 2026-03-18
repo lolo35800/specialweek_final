@@ -1,17 +1,18 @@
 .auth-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: 16px;
+  animation: fadeIn 0.2s;
 }
 
 .auth-modal {
-  background: var(--bg-card);
+  background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 32px;
@@ -19,6 +20,7 @@
   max-width: 400px;
   position: relative;
   box-shadow: var(--shadow);
+  animation: fadeInUp 0.3s var(--ease-spring);
 }
 
 .auth-close {
@@ -65,7 +67,7 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s var(--ease-out);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -117,7 +119,7 @@
   background: var(--danger-bg);
   padding: 8px 12px;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .auth-submit {
@@ -129,7 +131,7 @@
 }
 
 .auth-submit:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -149,6 +151,7 @@
   font-weight: 600;
   padding: 0;
   text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .auth-mfa {

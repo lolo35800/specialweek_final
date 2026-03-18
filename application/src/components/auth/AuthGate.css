@@ -10,13 +10,9 @@
   width: 40px;
   height: 40px;
   border: 3px solid var(--border);
-  border-top-color: #fca311;
+  border-top-color: var(--primary);
   border-radius: 50%;
-  animation: ag-spin 0.7s linear infinite;
-}
-
-@keyframes ag-spin {
-  to { transform: rotate(360deg); }
+  animation: spin 0.7s linear infinite;
 }
 
 .authgate-wall {
@@ -26,10 +22,35 @@
   justify-content: center;
   background: var(--bg);
   padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.authgate-wall::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(20,184,166,0.12) 0%, transparent 70%);
+  top: -200px;
+  right: -200px;
+  pointer-events: none;
+}
+
+.authgate-wall::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(244,63,94,0.08) 0%, transparent 70%);
+  bottom: -100px;
+  left: -100px;
+  pointer-events: none;
 }
 
 .authgate-card {
   background: var(--bg-card);
+  backdrop-filter: blur(20px);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 48px 40px;
@@ -41,13 +62,18 @@
   align-items: center;
   gap: 16px;
   box-shadow: var(--shadow);
+  position: relative;
+  animation: fadeInUp 0.5s var(--ease-out);
 }
 
 .authgate-logo {
   font-size: 28px;
   font-weight: 900;
-  color: #fca311;
-  letter-spacing: -1px;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
   margin-bottom: 4px;
 }
 
@@ -68,21 +94,23 @@
 .authgate-btn {
   width: 100%;
   justify-content: center;
-  padding: 13px;
+  padding: 14px;
   font-size: 15px;
   margin-top: 8px;
-  background: #fca311;
-  color: #14213d;
+  background: var(--gradient);
+  color: #fff;
   font-weight: 700;
+  border-radius: 999px;
+  box-shadow: 0 4px 16px rgba(20, 184, 166, 0.3);
+  transition: all 0.25s var(--ease-out);
 }
 
 .authgate-btn:hover {
-  background: #ffb733;
-  color: #14213d;
+  box-shadow: 0 6px 24px rgba(20, 184, 166, 0.5);
+  transform: translateY(-1px);
+  color: #fff;
 }
 
 @media (max-width: 480px) {
-  .authgate-card {
-    padding: 36px 24px;
-  }
+  .authgate-card { padding: 36px 24px; }
 }

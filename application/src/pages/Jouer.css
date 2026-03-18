@@ -8,61 +8,95 @@
 .game-card {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   padding: 28px;
-  border-radius: 16px;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
   text-decoration: none;
   color: var(--text-h);
   position: relative;
-  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
-  background: var(--bg);
+  transition: all 0.3s var(--ease-out);
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+
+.game-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-subtle);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.game-card:hover::before {
+  opacity: 1;
 }
 
 .game-card:hover {
-  border-color: var(--accent);
-  box-shadow: var(--shadow);
-  transform: translateY(-4px);
+  border-color: var(--primary-border);
+  box-shadow: var(--glow-primary), var(--shadow);
+  transform: translateY(-6px);
+  color: var(--text-h);
 }
 
 .game-badge {
   position: absolute;
   top: 16px;
   right: 16px;
-  padding: 2px 10px;
-  border-radius: 99px;
-  background: var(--accent);
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--gradient-accent);
   color: #fff;
   font-size: 11px;
   font-weight: 700;
+  z-index: 1;
 }
 
 .game-emoji {
-  font-size: 36px;
+  font-size: 40px;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.game-card:hover .game-emoji {
+  transform: scale(1.15) rotate(-5deg);
 }
 
 .game-title {
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 800;
   margin: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .game-description {
   font-size: 14px;
-  color: var(--text);
-  line-height: 1.5;
+  color: var(--text-muted);
+  line-height: 1.55;
   margin: 0;
   flex: 1;
+  position: relative;
+  z-index: 1;
 }
 
 .game-cta {
-  font-weight: 600;
-  color: var(--accent);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--primary-light);
   margin-top: 8px;
+  position: relative;
+  z-index: 1;
+  transition: color 0.2s;
+}
+
+.game-card:hover .game-cta {
+  color: var(--accent);
 }
 
 @media (max-width: 768px) {
-  .games-grid {
-    grid-template-columns: 1fr;
-  }
+  .games-grid { grid-template-columns: 1fr; }
 }

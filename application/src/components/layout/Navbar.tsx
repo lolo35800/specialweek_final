@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import { useTheme } from '../../contexts/ThemeContext'
 import { AuthModal } from '../auth/AuthModal'
 import './Navbar.css'
 
 export default function Navbar() {
   const { user, profile, signOut } = useAuth()
+  const { theme, toggle } = useTheme()
   const [showAuth, setShowAuth] = useState(false)
   const [showProfile, setShowProfile] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
@@ -27,7 +29,10 @@ export default function Navbar() {
           <span className="brand-text">VériIA</span>
         </NavLink>
 
-        <div className="navbar-auth">
+        <div className="navbar-auth" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button className="navbar-theme-btn" onClick={toggle} aria-label="Changer de thème">
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
           {user ? (
             <div className="navbar-user" ref={profileRef}>
               <button
@@ -55,9 +60,6 @@ export default function Navbar() {
                   </Link>
                   <Link to="/settings" className="navbar-dropdown-item">
                     Modifier le profil
-                  </Link>
-                  <Link to="/assistant" className="navbar-dropdown-item">
-                    🤖 Assistant IA
                   </Link>
                   <hr className="navbar-dropdown-divider" />
                   <button className="navbar-dropdown-item danger" onClick={signOut}>

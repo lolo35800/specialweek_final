@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
+import { ThemeProvider } from './contexts/ThemeContext'
 import { AuthGate } from './components/auth/AuthGate'
 import Layout from './components/layout/Layout'
 import Home from './pages/Home'
@@ -17,12 +18,12 @@ import Profile from './pages/Profile'
 import Admin from './pages/Admin'
 import EditProfile from './pages/EditProfile'
 import NotFound from './pages/NotFound'
-import AiChat from './pages/AiChat'
 
 import ActusPage from './pages/ActusPage'
 
 export default function App() {
   return (
+    <ThemeProvider>
     <BrowserRouter>
       <AuthProvider>
         <AuthGate>
@@ -43,12 +44,12 @@ export default function App() {
             <Route path="jouer/fake-ou-reel" element={<FakeOrReal />} />
             <Route path="jouer/spot-the-zone" element={<SpotTheZone />} />
             <Route path="regles" element={<ReglesAntiDesinfo />} />
-            <Route path="assistant" element={<AiChat />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
         </AuthGate>
       </AuthProvider>
     </BrowserRouter>
+    </ThemeProvider>
   )
 }

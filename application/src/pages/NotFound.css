@@ -6,36 +6,40 @@
   gap: 16px;
   padding: 80px 24px;
   text-align: center;
+  animation: fadeInUp 0.5s var(--ease-out);
 }
 
 .notfound-emoji {
-  font-size: 64px;
+  font-size: 72px;
+  animation: float 3s ease-in-out infinite;
 }
 
 .page-notfound h1 {
   font-size: 80px;
   font-weight: 900;
-  color: var(--accent);
+  color: var(--primary-light);
   margin: 0;
 }
 
 .page-notfound p {
-  font-size: 18px;
-  color: var(--text);
+  font-size: 17px;
+  color: var(--text-muted);
 }
 
 .page-notfound .btn {
   display: inline-block;
-  padding: 12px 24px;
-  border-radius: 10px;
+  padding: 12px 28px;
+  border-radius: 999px;
   text-decoration: none;
   font-weight: 600;
-  font-size: 16px;
-  background: var(--accent);
+  font-size: 15px;
+  background: var(--gradient);
   color: #fff;
-  transition: opacity 0.15s;
+  box-shadow: 0 4px 16px rgba(20, 184, 166, 0.3);
+  transition: all 0.25s var(--ease-out);
 }
 
 .page-notfound .btn:hover {
-  opacity: 0.85;
+  box-shadow: 0 6px 24px rgba(20, 184, 166, 0.5);
+  transform: translateY(-2px);
 }
