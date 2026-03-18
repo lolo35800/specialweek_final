@@ -1,0 +1,20 @@
+{
+  "scores": [
+    {
+      "id": "106fe0f7-a134-44e7-a83a-631e456b543d",
+      "username": "Anonyme",
+      "score": 0,
+      "total": 10,
+      "module": "quiz",
+      "timestamp": "2026-03-17T11:31:58.413242"
+    },
+    {
+      "id": "5e782925-533d-4a89-a816-843bb739b3a3",
+      "username": "lebgdu35800",
+      "score": 5,
+      "total": 10,
+      "module": "quiz",
+      "timestamp": "2026-03-18T08:41:43.466433"
+    }
+  ]
+}

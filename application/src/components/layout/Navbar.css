@@ -5,10 +5,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
-  height: 56px;
-  background: #fca311;
-  border-bottom: none;
+  padding: 0 20px;
+  height: 60px;
+  background: var(--header);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
 }
 
 /* === Brand === */
@@ -17,16 +19,13 @@
   align-items: center;
   text-decoration: none;
   font-weight: 900;
-  font-size: 23px;
-  color: #14213d;
+  font-size: 22px;
   flex-shrink: 0;
   letter-spacing: -0.5px;
 }
 
-
 .brand-text {
-  color: #14213d;
-  -webkit-text-fill-color: #14213d;
+  color: var(--primary-light);
 }
 
 .navbar-auth {
@@ -34,14 +33,17 @@
 }
 
 .navbar-signin-btn {
-  border-color: #14213d !important;
-  color: #14213d !important;
-  font-size: 15px;
-  padding: 8px 16px;
+  font-size: 14px;
+  padding: 8px 18px;
+  border-radius: 999px !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
 }
 
 .navbar-signin-btn:hover {
-  background: rgba(20, 33, 61, 0.12) !important;
+  background: var(--primary-bg) !important;
+  border-color: var(--primary) !important;
+  color: var(--primary-light) !important;
 }
 
 .navbar-user {
@@ -52,30 +54,30 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(20, 33, 61, 0.15);
-  border: 1px solid rgba(20, 33, 61, 0.3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
   border-radius: 999px;
   padding: 4px 14px 4px 4px;
   cursor: pointer;
-  transition: all 0.15s;
-  color: #14213d;
-  font-size: 15px;
+  transition: all 0.25s var(--ease-out);
+  color: var(--text);
+  font-size: 14px;
 }
 
 .navbar-avatar-btn:hover {
-  background: rgba(20, 33, 61, 0.25);
-  border-color: rgba(20, 33, 61, 0.5);
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
 }
 
 .navbar-avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #14213d;
+  background: var(--gradient);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   color: white;
   overflow: hidden;
@@ -94,44 +96,47 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #14213d;
+  color: var(--text);
 }
 
 .navbar-chevron {
-  font-size: 12px;
-  color: #14213d;
+  font-size: 11px;
+  color: var(--text-muted);
+  transition: transform 0.2s;
 }
 
 .navbar-dropdown {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  background: #14213d;
-  border: 1px solid rgba(252, 163, 17, 0.2);
-  border-radius: var(--radius);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
   box-shadow: var(--shadow);
-  min-width: 180px;
+  min-width: 200px;
   overflow: hidden;
   z-index: 200;
+  animation: fadeInUp 0.2s var(--ease-out);
+  backdrop-filter: blur(20px);
 }
 
 .navbar-dropdown-item {
   display: block;
   width: 100%;
   padding: 12px 18px;
-  font-size: 16px;
-  color: #F1F5F9;
+  font-size: 14px;
+  color: var(--text);
   text-decoration: none;
   background: none;
   border: none;
   cursor: pointer;
   text-align: left;
-  transition: background 0.15s;
+  transition: all 0.15s;
 }
 
 .navbar-dropdown-item:hover {
-  background: rgba(252, 163, 17, 0.1);
-  color: #fca311;
+  background: var(--bg-elevated);
+  color: var(--primary-light);
 }
 
 .navbar-dropdown-item.danger {
@@ -143,9 +148,43 @@
 }
 
 .navbar-dropdown-divider {
-  margin: 4px 0;
+  margin: 4px 8px;
   border: none;
   border-top: 1px solid var(--border);
+}
+
+/* === Theme toggle === */
+.navbar-theme-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.25s var(--ease-out);
+  color: var(--text);
+  flex-shrink: 0;
+  padding: 0;
+  margin-right: 8px;
+}
+
+.navbar-theme-btn:hover {
+  background: var(--primary-bg);
+  border-color: var(--primary-border);
+  transform: rotate(15deg);
+}
+
+/* === Light overrides === */
+[data-theme="light"] .navbar {
+  border-bottom-color: var(--border);
+}
+
+[data-theme="light"] .navbar-dropdown {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
 }
 
 @media (max-width: 640px) {

@@ -4,6 +4,8 @@ import { submitScore } from '../services/scoreService'
 import { fallback as fallbackData } from '../data/fallback'
 import type { Question, QuizAnswer } from '../types/quiz'
 import { useAuth } from '../contexts/AuthContext'
+import { unlockQuizBadges, type Badge } from '../data/badges'
+import { BadgeUnlockModal } from '../components/badges/BadgeUnlockModal'
 
 const INITIAL_TIMER = 30
 
@@ -20,6 +22,7 @@ export default function Quiz() {
   const [isFinished, setIsFinished] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [sentScore, setSentScore] = useState<boolean>(false)
+  const [newBadges, setNewBadges] = useState<Badge[]>([])
 
   const currentQuestion = questions[currentIndex]
 
@@ -72,6 +75,11 @@ export default function Quiz() {
       module: 'quiz' as const,
     }
 
+    if (profile?.id) {
+      const earned = unlockQuizBadges(profile.id, score, questions.length)
+      if (earned.length > 0) setNewBadges(earned)
+    }
+
     submitScore(payload)
       .then(() => setSentScore(true))
       .catch(() => {
@@ -91,6 +99,7 @@ export default function Quiz() {
     setRemaining(INITIAL_TIMER)
     setIsFinished(false)
     setSentScore(false)
+    setNewBadges([])
     setError(null)
   }
 
@@ -159,6 +168,7 @@ export default function Quiz() {
   if (isFinished) {
     return (
       <div className="page-quiz">
+        <BadgeUnlockModal badges={newBadges} />
         <div className="page-header">
           <span className="page-emoji">🏁</span>
           <h1>Résultats</h1>

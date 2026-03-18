@@ -11,6 +11,7 @@
 
 .page-emoji {
   font-size: 48px;
+  animation: float 3s ease-in-out infinite;
 }
 
 .page-header h1 {
@@ -18,16 +19,17 @@
   font-size: 40px;
   font-weight: 800;
   color: var(--text-h);
+  letter-spacing: -0.02em;
 }
 
 .page-subtitle {
-  color: var(--text);
-  font-size: 18px;
+  color: var(--text-muted);
+  font-size: 17px;
   margin: 0;
   max-width: 520px;
 }
 
-/* Placeholder blocks for pages not yet implemented */
+/* Placeholder blocks */
 .lessons-grid .lesson-placeholder,
 .gallery-placeholder,
 .quiz-placeholder,
@@ -39,10 +41,10 @@
   justify-content: center;
   gap: 12px;
   padding: 80px 24px;
-  border: 2px dashed var(--border);
-  border-radius: 16px;
-  color: var(--text);
-  font-size: 16px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-size: 15px;
 }
 
 .lessons-grid .lesson-placeholder span,

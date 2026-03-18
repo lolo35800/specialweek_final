@@ -5,6 +5,10 @@ import { getProfileByUsername } from '../services/profileService'
 import { getPostsByUser } from '../services/postService'
 import { PostCard } from '../components/cards/PostCard'
 import { MasonryGrid } from '../components/masonry/MasonryGrid'
+import { BadgeGrid } from '../components/badges/BadgeGrid'
+import { BadgeUnlockModal } from '../components/badges/BadgeUnlockModal'
+import { unlockCommunityBadges, type Badge } from '../data/badges'
+import { useAuth } from '../contexts/AuthContext'
 import './Profile.css'
 
 type PostWithProfile = Post & {
@@ -13,9 +17,11 @@ type PostWithProfile = Post & {
 
 export default function Profile() {
   const { username } = useParams<{ username: string }>()
+  const { profile: currentUserProfile } = useAuth()
   const [profile, setProfile] = useState<ProfileType | null>(null)
   const [posts, setPosts] = useState<PostWithProfile[]>([])
   const [loading, setLoading] = useState(true)
+  const [newBadges, setNewBadges] = useState<Badge[]>([])
 
   useEffect(() => {
     if (!username) return
@@ -26,6 +32,14 @@ export default function Profile() {
         setProfile(p)
         const userPosts = await getPostsByUser(p.id)
         setPosts(userPosts as PostWithProfile[])
+
+        // Check community badges for the current user's own profile
+        if (currentUserProfile?.id === p.id) {
+          const likes = userPosts.reduce((acc: number, post: Post) => acc + post.likes_count, 0)
+          const plays = userPosts.reduce((acc: number, post: Post) => acc + post.plays_count, 0)
+          const earned = unlockCommunityBadges(p.id, userPosts.length, likes, plays)
+          if (earned.length > 0) setNewBadges(earned)
+        }
       } catch (e) {
         console.error('Erreur chargement profil:', e)
       } finally {
@@ -48,6 +62,7 @@ export default function Profile() {
 
   return (
     <div className="profile-page">
+      <BadgeUnlockModal badges={newBadges} />
       <div className="profile-hero">
         <div className="profile-avatar-lg">
           {profile.avatar_url
@@ -75,6 +90,10 @@ export default function Profile() {
           </div>
         </div>
       </div>
+
+      {currentUserProfile?.id === profile.id && (
+        <BadgeGrid userId={profile.id} />
+      )}
 
       <div className="profile-posts">
         <h2>Posts ({posts.length})</h2>

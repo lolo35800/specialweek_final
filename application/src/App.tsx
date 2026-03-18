@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
+import { ThemeProvider } from './contexts/ThemeContext'
 import { AuthGate } from './components/auth/AuthGate'
 import Layout from './components/layout/Layout'
 import Home from './pages/Home'
@@ -22,6 +23,7 @@ import ActusPage from './pages/ActusPage'
 
 export default function App() {
   return (
+    <ThemeProvider>
     <BrowserRouter>
       <AuthProvider>
         <AuthGate>
@@ -48,5 +50,6 @@ export default function App() {
         </AuthGate>
       </AuthProvider>
     </BrowserRouter>
+    </ThemeProvider>
   )
 }

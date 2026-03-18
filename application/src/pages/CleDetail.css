@@ -1,7 +1,7 @@
 /* === Barre de progression de lecture === */
 .read-progress-bar {
   position: fixed;
-  top: 56px; /* hauteur de la navbar */
+  top: 60px;
   left: 0;
   right: 0;
   height: 3px;
@@ -11,7 +11,7 @@
 
 .read-progress-fill {
   height: 100%;
-  background: #fca311;
+  background: var(--gradient);
   transition: width 0.1s linear;
   border-radius: 0 2px 2px 0;
 }
@@ -20,7 +20,8 @@
 .cle-detail-page {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 24px 24px 80px;
+  padding: 32px 24px 80px;
+  animation: fadeInUp 0.5s var(--ease-out);
 }
 
 .cle-detail-header {
@@ -31,19 +32,22 @@
 }
 
 .cle-back-btn {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-muted);
   text-decoration: none;
-  transition: color 0.15s;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .cle-back-btn:hover {
-  color: #fca311;
+  color: var(--primary-light);
 }
 
 .cle-detail-duree {
-  font-size: 15px;
+  font-size: 14px;
   color: var(--text-muted);
 }
 
@@ -62,21 +66,19 @@
 }
 
 .cle-sommaire-title {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-muted);
   margin-bottom: 16px;
 }
 
-/* Jauge + items côte à côte */
 .cle-sommaire-progress-wrap {
   display: flex;
   gap: 0;
 }
 
-/* Track vertical */
 .cle-sommaire-track {
   position: relative;
   width: 3px;
@@ -91,24 +93,23 @@
   top: 0;
   left: 0;
   width: 100%;
-  background: #fca311;
+  background: var(--gradient);
   border-radius: 2px;
   transition: height 0.15s linear;
   min-height: 3px;
 }
 
-/* Label % qui suit le bas de la jauge */
 .cle-sommaire-pct {
   position: absolute;
   left: 10px;
   transform: translateY(-50%);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  color: #fca311;
+  color: var(--primary-light);
   white-space: nowrap;
   transition: top 0.15s linear;
-  background: var(--bg-card);
-  padding: 1px 4px;
+  background: var(--panel);
+  padding: 2px 6px;
   border-radius: 4px;
   pointer-events: none;
 }
@@ -121,11 +122,11 @@
 
 .cle-sommaire-item {
   display: block;
-  padding: 9px 12px;
-  font-size: 15px;
+  padding: 8px 12px;
+  font-size: 14px;
   color: var(--text-muted);
   text-decoration: none;
-  transition: all 0.15s;
+  transition: all 0.2s var(--ease-out);
   line-height: 1.4;
   margin-bottom: 2px;
   border-radius: var(--radius-sm);
@@ -137,7 +138,7 @@
 }
 
 .cle-sommaire-item.active {
-  color: #fca311;
+  color: var(--primary-light);
   background: var(--primary-bg);
 }
 
@@ -146,12 +147,13 @@
   font-size: clamp(28px, 4vw, 44px);
   font-weight: 800;
   color: var(--text-h);
-  line-height: 1.15;
+  line-height: 1.1;
   margin-bottom: 16px;
+  letter-spacing: -0.02em;
 }
 
 .cle-article-accroche {
-  font-size: 19px;
+  font-size: 18px;
   color: var(--text-muted);
   line-height: 1.7;
   margin-bottom: 48px;
@@ -171,7 +173,7 @@
   color: var(--text-h);
   margin-bottom: 16px;
   padding-left: 14px;
-  border-left: 3px solid #fca311;
+  border-left: 3px solid var(--primary);
 }
 
 .cle-section-contenu {
@@ -181,9 +183,9 @@
 }
 
 .cle-section-contenu p {
-  font-size: 17px;
+  font-size: 16px;
   color: var(--text);
-  line-height: 1.75;
+  line-height: 1.8;
 }
 
 .cle-section-contenu strong {
@@ -209,15 +211,7 @@
 
 /* === Responsive === */
 @media (max-width: 768px) {
-  .cle-detail-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .cle-sommaire {
-    display: none;
-  }
-
-  .cle-detail-page {
-    padding: 16px 16px 100px;
-  }
+  .cle-detail-layout { grid-template-columns: 1fr; }
+  .cle-sommaire { display: none; }
+  .cle-detail-page { padding: 16px 16px 100px; }
 }
