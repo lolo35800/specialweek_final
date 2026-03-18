@@ -56,6 +56,9 @@ export default function Navbar() {
                   <Link to="/settings" className="navbar-dropdown-item">
                     Modifier le profil
                   </Link>
+                  <Link to="/assistant" className="navbar-dropdown-item">
+                    🤖 Assistant IA
+                  </Link>
                   <hr className="navbar-dropdown-divider" />
                   <button className="navbar-dropdown-item danger" onClick={signOut}>
                     Se déconnecter

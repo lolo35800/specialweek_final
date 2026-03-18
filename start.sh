@@ -8,23 +8,18 @@ echo "=============================================="
 echo " Démarrage de VériIA"
 echo "=============================================="
 
-# ── Backend (FastAPI) ──────────────────────────────
+# ── Backend (Express/TypeScript) ──────────────────
 echo ""
 echo "[ Backend ] Vérification..."
 cd "$ROOT/backend"
 
-if [ ! -d "venv" ]; then
-  echo "[ Backend ] Création du virtualenv..."
-  python3 -m venv venv
-fi
-
-if ! venv/bin/pip show fastapi &>/dev/null; then
-  echo "[ Backend ] Installation des dépendances..."
-  venv/bin/pip install -r requirements.txt --quiet
+if [ ! -d "node_modules" ]; then
+  echo "[ Backend ] Installation des dépendances npm..."
+  npm install
 fi
 
 echo "[ Backend ] Démarrage sur http://localhost:8000"
-venv/bin/python -m uvicorn app.main:app --reload --port 8000 &
+npx tsx src/index.ts &
 BACKEND_PID=$!
 
 # ── Frontend (Vite) ────────────────────────────────

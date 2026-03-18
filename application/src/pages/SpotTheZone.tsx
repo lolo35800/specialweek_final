@@ -1,5 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './Quiz.css'
+import { useAuth } from '../contexts/AuthContext'
+import { unlockSpotBadges, type Badge } from '../data/badges'
+import { BadgeUnlockModal } from '../components/badges/BadgeUnlockModal'
 
 const hotspots = [
   { id: 1, top: '15%', left: '25%', width: '18%', height: '12%', label: 'Visage flou' },
@@ -10,10 +13,19 @@ const hotspots = [
 const correctIds = [1, 2]
 
 export default function SpotTheZone() {
+  const { profile } = useAuth()
   const [found, setFound] = useState<number[]>([])
+  const [newBadges, setNewBadges] = useState<Badge[]>([])
 
   const hitCount = useMemo(() => found.filter((id) => correctIds.includes(id)).length, [found])
   const isFinished = hitCount >= correctIds.length
+
+  useEffect(() => {
+    if (isFinished && profile?.id) {
+      const earned = unlockSpotBadges(profile.id)
+      if (earned.length > 0) setNewBadges(earned)
+    }
+  }, [isFinished, profile?.id])
 
   function tap(id: number) {
     setFound((prev) => (prev.includes(id) ? prev : [...prev, id]))
@@ -21,6 +33,7 @@ export default function SpotTheZone() {
 
   return (
     <div className="page-quiz">
+      <BadgeUnlockModal badges={newBadges} />
       <div className="page-header">
         <span className="page-emoji">🔍</span>
         <h1>Trouve les incohérences</h1>
@@ -47,7 +60,7 @@ export default function SpotTheZone() {
           <p>{hitCount}/{correctIds.length} incohérences trouvées</p>
           <p>{isFinished ? 'Bravo ! Tu as repéré les principales incohérences.' : 'Cherche les éléments visuellement impossibles.'}</p>
           {isFinished && (
-            <button className="btn-primary" onClick={() => setFound([])}>Recommencer</button>
+            <button className="btn-primary" onClick={() => { setFound([]); setNewBadges([]) }}>Recommencer</button>
           )}
         </div>
       </div>

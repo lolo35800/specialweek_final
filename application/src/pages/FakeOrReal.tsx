@@ -1,6 +1,9 @@
 import { useMemo, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Quiz.css'
+import { useAuth } from '../contexts/AuthContext'
+import { unlockFakeOrRealBadges, type Badge } from '../data/badges'
+import { BadgeUnlockModal } from '../components/badges/BadgeUnlockModal'
 
 import fakeImg1 from '../assets/fakeOrReal_IMG1.jpeg'
 import fakeImg4 from '../assets/FakeOrReal_IMG4.jpeg'
@@ -22,6 +25,8 @@ const items: Item[] = [
 
 export default function FakeOrReal() {
   const navigate = useNavigate()
+  const { profile } = useAuth()
+  const [newBadges, setNewBadges] = useState<Badge[]>([])
   const [index, setIndex] = useState(0)
   const [chosen, setChosen] = useState<number | null>(null)
   const [answers, setAnswers] = useState<{ id: number; ok: boolean; choice: boolean }[]>([])
@@ -81,12 +86,17 @@ export default function FakeOrReal() {
   useEffect(() => {
     if (index >= items.length) {
       fetchLeaderboard()
+      if (profile?.id) {
+        const earned = unlockFakeOrRealBadges(profile.id, score, items.length)
+        if (earned.length > 0) setNewBadges(earned)
+      }
     }
-  }, [index, items.length])
+  }, [index, items.length, profile?.id, score])
 
   if (index >= items.length) {
     return (
       <div className="page-quiz">
+        <BadgeUnlockModal badges={newBadges} />
         <div className="page-header">
           <span className="page-emoji">🕵️</span>
           <h1>Fake ou Réel ? - Résultats</h1>
@@ -155,7 +165,7 @@ export default function FakeOrReal() {
 
           <div style={{ display: 'flex', gap: '15px', marginTop: '30px', justifyContent: 'center' }}>
             <button className="btn-primary" style={{flex: 1, padding: '15px', maxWidth: '250px'}} onClick={() => {
-              setIndex(0); setChosen(null); setAnswers([]); setSubmitted(false); setUsername(''); setLeaderboard([]);
+              setIndex(0); setChosen(null); setAnswers([]); setSubmitted(false); setUsername(''); setLeaderboard([]); setNewBadges([]);
             }}>Rejouer</button>
             <button className="btn-secondary" style={{flex: 1, padding: '15px', maxWidth: '250px', background: 'transparent', border: '1px solid #a78bfa', color: '#a78bfa', borderRadius: '30px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s ease'}} onClick={() => navigate('/')}>Retour au menu</button>
           </div>

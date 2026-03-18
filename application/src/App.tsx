@@ -17,6 +17,7 @@ import Profile from './pages/Profile'
 import Admin from './pages/Admin'
 import EditProfile from './pages/EditProfile'
 import NotFound from './pages/NotFound'
+import AiChat from './pages/AiChat'
 
 import ActusPage from './pages/ActusPage'
 
@@ -42,6 +43,7 @@ export default function App() {
             <Route path="jouer/fake-ou-reel" element={<FakeOrReal />} />
             <Route path="jouer/spot-the-zone" element={<SpotTheZone />} />
             <Route path="regles" element={<ReglesAntiDesinfo />} />
+            <Route path="assistant" element={<AiChat />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
