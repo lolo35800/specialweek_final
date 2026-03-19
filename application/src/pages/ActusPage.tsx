@@ -4,13 +4,16 @@ import type { Actu } from '../data/actus'
 
 export default function ActusPage() {
   const [actus, setActus] = useState<Actu[]>([])
+  const [aiSummary, setAiSummary] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [loadingSummary, setLoadingSummary] = useState(true)
   
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('Toutes')
   const [sortOrder, setSortOrder] = useState('recent')
 
   useEffect(() => {
+    // 1. Fetch search data
     fetch('http://localhost:8000/actus')
       .then(res => res.json())
       .then(data => {
@@ -22,6 +25,18 @@ export default function ActusPage() {
       .catch(err => {
         console.error("Could not fetch actus:", err)
         setLoading(false)
+      })
+
+    // 2. Fetch AI summary
+    fetch('http://localhost:8000/actus-summary')
+      .then(res => res.json())
+      .then(data => {
+        if (data.summary) setAiSummary(data.summary)
+        setLoadingSummary(false)
+      })
+      .catch(err => {
+        console.error("Could not fetch AI summary:", err)
+        setLoadingSummary(false)
       })
   }, [])
 
@@ -56,6 +71,23 @@ export default function ActusPage() {
       <header className="actus-header">
         <h1 className="actus-title">Toute l'actualité IA</h1>
         <p className="actus-sub">Suivez les dernières informations sur l'intelligence artificielle et la désinformation.</p>
+        
+        {/* Résumé IA */}
+        {(loadingSummary || aiSummary) && (
+          <div className="actus-ai-summary-box">
+            <div className="actus-ai-summary-header">
+              <span className="actus-ai-summary-icon">✨</span>
+              <span className="actus-ai-summary-label">Flash Actu IA</span>
+            </div>
+            {loadingSummary ? (
+              <div className="actus-ai-summary-loading">
+                <div className="actus-ai-summary-skeleton"></div>
+              </div>
+            ) : (
+              <p className="actus-ai-summary-text">{aiSummary}</p>
+            )}
+          </div>
+        )}
       </header>
       
       <section className="actus-filters-section">

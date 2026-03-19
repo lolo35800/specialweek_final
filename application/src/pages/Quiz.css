@@ -106,6 +106,19 @@
   box-shadow: 0 4px 16px rgba(20, 184, 166, 0.3);
 }
 
+.quiz-option.correct {
+  background: var(--success-bg) !important;
+  border-color: var(--success) !important;
+  color: var(--success) !important;
+  font-weight: 700;
+}
+
+.quiz-option.wrong {
+  background: var(--danger-bg) !important;
+  border-color: var(--danger) !important;
+  color: var(--danger) !important;
+}
+
 .quiz-actions {
   display: flex;
   gap: 10px;

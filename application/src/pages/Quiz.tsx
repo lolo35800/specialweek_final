@@ -24,6 +24,9 @@ export default function Quiz() {
   const [sentScore, setSentScore] = useState<boolean>(false)
   const [newBadges, setNewBadges] = useState<Badge[]>([])
 
+  const [validated, setValidated] = useState(false)
+  const [lastCorrect, setLastCorrect] = useState<boolean | null>(null)
+
   const currentQuestion = questions[currentIndex]
 
   const score = useMemo(() => answers.filter((a) => a.correct).length, [answers])
@@ -49,12 +52,12 @@ export default function Quiz() {
   }, [])
 
   useEffect(() => {
-    if (isLoading || isFinished || questions.length === 0) return
+    if (isLoading || isFinished || questions.length === 0 || validated) return
 
     const timer = setInterval(() => {
       setRemaining((prev) => {
         if (prev <= 1) {
-          handleAnswer(null)
+          handleValidate(null)
           return INITIAL_TIMER
         }
         return prev - 1
@@ -63,7 +66,7 @@ export default function Quiz() {
 
     return () => clearInterval(timer)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, isFinished, questions, currentIndex])
+  }, [isLoading, isFinished, questions, currentIndex, validated])
 
   useEffect(() => {
     if (!isFinished || answers.length === 0 || sentScore) return
@@ -101,12 +104,17 @@ export default function Quiz() {
     setSentScore(false)
     setNewBadges([])
     setError(null)
+    setValidated(false)
+    setLastCorrect(null)
   }
 
-  function handleAnswer(choice: number | null) {
-    if (!currentQuestion || isFinished) return
+  function handleValidate(choice: number | null) {
+    if (!currentQuestion || isFinished || validated) return
 
     const correct = choice === currentQuestion.bonne_reponse
+    setLastCorrect(correct)
+    setValidated(true)
+
     const nextAnswers = [
       ...answers,
       {
@@ -117,7 +125,9 @@ export default function Quiz() {
     ]
 
     setAnswers(nextAnswers)
+  }
 
+  function handleNext() {
     if (currentIndex + 1 >= questions.length) {
       setIsFinished(true)
       setSelectedOption(null)
@@ -127,6 +137,8 @@ export default function Quiz() {
     setCurrentIndex((prev) => prev + 1)
     setSelectedOption(null)
     setRemaining(INITIAL_TIMER)
+    setValidated(false)
+    setLastCorrect(null)
   }
 
   if (isLoading) {
@@ -218,11 +230,13 @@ export default function Quiz() {
         <div className="quiz-options">
           {currentQuestion.options.map((option, index) => {
             const selected = selectedOption === index
+            const isCorrect = index === currentQuestion.bonne_reponse
             return (
               <button
                 key={option}
-                className={`quiz-option ${selected ? 'selected' : ''}`}
-                onClick={() => setSelectedOption(index)}
+                className={`quiz-option ${selected ? 'selected' : ''} ${validated && isCorrect ? 'correct' : ''} ${validated && selected && !isCorrect ? 'wrong' : ''}`}
+                onClick={() => !validated && setSelectedOption(index)}
+                disabled={validated}
               >
                 {option}
               </button>
@@ -230,26 +244,31 @@ export default function Quiz() {
           })}
         </div>
 
-        <div className="quiz-actions">
-          <button
-            className="btn-primary"
-            disabled={selectedOption === null}
-            onClick={() => handleAnswer(selectedOption)}
-          >
-            Valider
-          </button>
-          <button
-            className="btn-secondary"
-            onClick={() => handleAnswer(null)}
-          >
-            Passer
-          </button>
-        </div>
-
-        {selectedOption !== null && (
-          <div className="question-hint">
-            <p>Explication pédagogique (s'affiche après réponse):</p>
-            <p><strong>{currentQuestion.explication}</strong></p>
+        {!validated ? (
+          <div className="quiz-actions">
+            <button
+              className="btn-primary"
+              disabled={selectedOption === null}
+              onClick={() => handleValidate(selectedOption)}
+            >
+              Valider
+            </button>
+            <button
+              className="btn-secondary"
+              onClick={() => handleValidate(null)}
+            >
+              Passer
+            </button>
+          </div>
+        ) : (
+          <div className="quiz-feedback" style={{ marginTop: '20px', padding: '20px', borderRadius: '12px', background: 'rgba(255, 255, 255, 0.05)', border: `1px solid ${lastCorrect ? '#4ade80' : '#f87171'}` }}>
+            <p style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px', color: lastCorrect ? '#4ade80' : '#f87171' }}>
+              {lastCorrect ? '✅ Bonne réponse !' : '❌ Mauvaise réponse !'}
+            </p>
+            <p style={{ marginBottom: '20px', color: 'var(--text-muted)' }}>{currentQuestion.explication}</p>
+            <button className="btn-primary" onClick={handleNext}>
+              {currentIndex + 1 === questions.length ? 'Voir les résultats' : 'Suivant'}
+            </button>
           </div>
         )}
       </div>
