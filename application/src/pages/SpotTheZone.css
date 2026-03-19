@@ -1,0 +1,285 @@
+@import './page-shared.css';
+
+.stz-page {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 16px;
+  animation: fadeInUp 0.5s var(--ease-out);
+}
+
+/* Progress */
+.stz-progress {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.stz-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.3s, transform 0.3s;
+}
+
+.stz-dot.done { background: var(--success); }
+.stz-dot.active { background: var(--primary); transform: scale(1.3); }
+
+/* Card */
+.stz-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stz-scene-title {
+  font-family: var(--heading);
+  font-size: 1.05rem;
+  color: var(--text-h);
+  margin: 0;
+}
+
+/* Score bar */
+.stz-score-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.stz-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.stz-bar-fill {
+  height: 100%;
+  background: var(--gradient);
+  border-radius: 99px;
+  transition: width 0.4s var(--ease-out);
+}
+
+/* Image */
+.stz-image-wrap {
+  position: relative;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: crosshair;
+  user-select: none;
+  border: 1px solid var(--border);
+}
+
+.stz-image {
+  width: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+/* Click markers */
+.stz-mark {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: popIn 0.25s var(--ease-spring) forwards;
+}
+
+.stz-mark-hit {
+  background: rgba(16, 185, 129, 0.3);
+  border: 2px solid var(--success);
+}
+
+.stz-mark-miss {
+  background: rgba(239, 68, 68, 0.2);
+  border: 2px solid var(--danger);
+  animation: popIn 0.2s var(--ease-spring) forwards, fadeOut 0.8s 0.6s forwards;
+}
+
+/* Hotspot reveals */
+.stz-hotspot-reveal {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--success);
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.12);
+  pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+  animation: revealZone 0.4s var(--ease-spring) forwards;
+}
+
+.stz-hotspot-label {
+  background: var(--success);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 99px;
+  white-space: nowrap;
+  transform: translateY(100%);
+}
+
+/* Hint */
+.stz-hint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+  text-align: center;
+}
+
+/* Button */
+.stz-btn {
+  background: var(--gradient);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.stz-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+/* Explanations */
+.stz-explanations {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stz-explanations h3 {
+  font-family: var(--heading);
+  color: var(--text-h);
+  margin: 0;
+}
+
+.stz-explanation-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--success);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stz-explanation-item strong {
+  color: var(--success);
+  font-size: 0.92rem;
+}
+
+.stz-explanation-item p {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+/* Result screen */
+.stz-result-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  box-shadow: var(--shadow-card);
+}
+
+.stz-final-score {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.stz-score-num {
+  font-family: var(--heading);
+  font-size: 4rem;
+  font-weight: 700;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+
+.stz-score-max {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+}
+
+.stz-score-label {
+  margin: 0;
+  color: var(--text);
+  max-width: 380px;
+  line-height: 1.5;
+}
+
+.stz-tips {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-top: 24px;
+}
+
+.stz-tips h3 {
+  font-family: var(--heading);
+  color: var(--text-h);
+  margin: 0 0 14px;
+}
+
+.stz-tips ul {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* Animations */
+@keyframes popIn {
+  from { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  to   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; }
+}
+
+@keyframes revealZone {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@media (max-width: 600px) {
+  .stz-card { padding: 16px; }
+  .stz-score-num { font-size: 3rem; }
+}
