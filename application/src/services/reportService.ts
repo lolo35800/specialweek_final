@@ -23,9 +23,10 @@ export async function hasReportedPost(postId: string, userId: string): Promise<b
 }
 
 export async function getPostReports() {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('post_reports')
     .select('*, posts(title), profiles(username)')
     .order('created_at', { ascending: false })
+  if (error) console.error('getPostReports error:', error)
   return data ?? []
 }
