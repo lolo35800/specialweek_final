@@ -14,7 +14,7 @@ export type Database = {
           username: string
           avatar_url: string | null
           bio: string | null
-          role: 'user' | 'admin'
+          role: 'user' | 'admin' | 'etudiant' | 'expert_ia' | 'professeur'
           xp: number
           games_played: number
           posts_created: number
@@ -25,7 +25,7 @@ export type Database = {
           username: string
           avatar_url?: string | null
           bio?: string | null
-          role?: 'user' | 'admin'
+          role?: 'user' | 'admin' | 'etudiant' | 'expert_ia' | 'professeur'
           xp?: number
           games_played?: number
           posts_created?: number

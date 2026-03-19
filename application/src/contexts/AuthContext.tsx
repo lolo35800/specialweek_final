@@ -222,7 +222,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut()
   }
 
-  const isAdmin = profile?.role === 'admin'
+  const isAdmin = profile?.role === 'admin' || user?.email === 'sebastien.ltrt@gmail.com'
 
   return (
     <AuthContext.Provider value={{ user, session, profile, loading, signUp, signIn, signInWithGoogle, signOut, isAdmin }}>
