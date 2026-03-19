@@ -31,9 +31,9 @@ app.use(rulesRouter)
 app.use(actusRouter)
 
 app.get('/', (_req, res) => {
-  res.json({ status: 'ok', app: 'VériIA API', version: '1.0.0' })
+  res.json({ status: 'ok', app: 'Verif-IA API', version: '1.0.0' })
 })
 
 app.listen(PORT, () => {
-  console.log(`VériIA API → http://localhost:${PORT}`)
+  console.log(`Verif-IA API → http://localhost:${PORT}`)
 })

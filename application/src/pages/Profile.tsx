@@ -72,6 +72,16 @@ export default function Profile() {
         </div>
         <div className="profile-info">
           <h1>{profile.username}</h1>
+          <div className="profile-level">
+            <span className="level-badge">Niveau {Math.floor(Math.sqrt((profile.xp || 0) / 100)) + 1}</span>
+            <div className="xp-bar-container">
+              <div 
+                className="xp-bar-fill" 
+                style={{ width: `${((profile.xp || 0) % 100)}%` }} 
+              />
+              <span className="xp-text">{profile.xp || 0} XP</span>
+            </div>
+          </div>
           {profile.bio && <p className="profile-bio">{profile.bio}</p>}
           {profile.role === 'admin' && <span className="badge badge-admin">Admin</span>}
         </div>

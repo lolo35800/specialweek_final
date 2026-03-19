@@ -18,8 +18,8 @@ import Profile from './pages/Profile'
 import Admin from './pages/Admin'
 import EditProfile from './pages/EditProfile'
 import NotFound from './pages/NotFound'
-
 import ActusPage from './pages/ActusPage'
+import Leaderboard from './pages/Leaderboard'
 
 export default function App() {
   return (
@@ -31,6 +31,7 @@ export default function App() {
           <Route element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="actus" element={<ActusPage />} />
+            <Route path="leaderboard" element={<Leaderboard />} />
             <Route path="feed" element={<Feed />} />
             <Route path="post/:id" element={<PostDetail />} />
             <Route path="create" element={<CreatePost />} />

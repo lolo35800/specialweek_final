@@ -59,14 +59,14 @@ const KNOWLEDGE_BASE: QA[] = [
     keywords: ['biais', 'manipulation', 'manipuler', 'emotion', 'émotion'],
     answer: 'La désinformation exploite nos biais cognitifs : le biais de confirmation (on croit ce qui nous arrange), l\'effet de répétition (à force de voir une info, on la croit vraie), et les émotions fortes (peur, colère). Quand un contenu te fait réagir fort, c\'est justement le moment de prendre du recul !',
   },
-  // ── Le projet VériIA ──
+  // ── Le projet Verif-IA ──
   {
-    keywords: ['veriia', 'vériia', 'site', 'plateforme', 'projet', 'application'],
-    answer: 'VériIA est une plateforme éducative qui t\'aide à comprendre la désinformation et l\'IA générative. Tu peux jouer à des quiz, analyser des images (Fake ou Réel), trouver des incohérences (Spot the Zone), et lire des articles d\'actualité. Tout ça pour développer ton esprit critique !',
+    keywords: ['verif-ia', 'veriia', 'vériia', 'site', 'plateforme', 'projet', 'application'],
+    answer: 'Verif-IA est une plateforme éducative qui t\'aide à comprendre la désinformation et l\'IA générative. Tu peux jouer à des quiz, analyser des images (Fake ou Réel), trouver des incohérences (Spot the Zone), et lire des articles d\'actualité. Tout ça pour développer ton esprit critique !',
   },
   {
     keywords: ['quiz', 'jouer', 'jeu', 'jeux', 'game'],
-    answer: 'VériIA propose 3 jeux :\n• Quiz : 10 questions sur la désinformation\n• Fake ou Réel : devine si une image est vraie ou générée par IA\n• Spot the Zone : repère les incohérences dans une image\nTu peux y accéder depuis la page "Jouer" !',
+    answer: 'Verif-IA propose 3 jeux :\n• Quiz : 10 questions sur la désinformation\n• Fake ou Réel : devine si une image est vraie ou générée par IA\n• Spot the Zone : repère les incohérences dans une image\nTu peux y accéder depuis la page "Jouer" !',
   },
   // ── Politesses ──
   {
@@ -87,7 +87,7 @@ const KNOWLEDGE_BASE: QA[] = [
   },
   {
     keywords: ['qui es tu', 'qui es-tu', 'tu es qui', 'ton nom', 'comment tu t\'appelle'],
-    answer: 'Je suis l\'assistant de VériIA ! Je suis là pour t\'aider à comprendre la désinformation, les fake news et l\'intelligence artificielle. Pose-moi tes questions !',
+    answer: 'Je suis l\'assistant de Verif-IA ! Je suis là pour t\'aider à comprendre la désinformation, les fake news et l\'intelligence artificielle. Pose-moi tes questions !',
   },
 ]
 
@@ -207,7 +207,7 @@ function typingDelay(): Promise<void> {
 export default function ChatBot() {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'assistant', content: 'Salut ! Je suis l\'assistant VériIA. Pose-moi tes questions sur la désinformation, les fake news ou l\'IA générative !' },
+    { role: 'assistant', content: 'Salut ! Je suis l\'assistant Verif-IA. Pose-moi tes questions sur la désinformation, les fake news ou l\'IA générative !' },
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -263,7 +263,7 @@ export default function ChatBot() {
           <div className="chatbot-header">
             <span className="chatbot-header-icon">🤖</span>
             <div>
-              <strong>Assistant VériIA</strong>
+              <strong>Assistant Verif-IA</strong>
               <span className="chatbot-status">En ligne</span>
             </div>
             <button className="chatbot-close" onClick={() => setOpen(false)}>✕</button>

@@ -20,7 +20,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
     return (
       <div className="authgate-wall">
         <div className="authgate-card">
-          <div className="authgate-logo">VériIA</div>
+          <div className="authgate-logo">Verif-IA</div>
           <h1 className="authgate-title">Bienvenue</h1>
           <p className="authgate-sub">
             Connecte-toi pour accéder aux quiz, clés pédagogiques et au feed de la communauté.
