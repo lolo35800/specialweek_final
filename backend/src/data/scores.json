@@ -15,6 +15,14 @@
       "total": 10,
       "module": "quiz",
       "timestamp": "2026-03-18T08:41:43.466433"
+    },
+    {
+      "id": "038344b9-dd19-4ca1-aa20-678fa4f16ffe",
+      "username": "hugo.luchier",
+      "score": 4,
+      "total": 4,
+      "module": "fake_or_real",
+      "timestamp": "2026-03-19T12:32:39.840Z"
     }
   ]
 }

@@ -12,7 +12,7 @@ export async function getProfileByUsername(username: string): Promise<Profile | 
 
 export async function updateProfile(
   userId: string,
-  updates: { username?: string; bio?: string; avatar_url?: string }
+  updates: { username?: string; bio?: string; avatar_url?: string; banner_url?: string }
 ): Promise<{ error: string | null }> {
   const { error } = await supabase.from('profiles').update(updates).eq('id', userId)
   return { error: error?.message ?? null }

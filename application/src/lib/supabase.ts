@@ -13,6 +13,7 @@ export type Database = {
           id: string
           username: string
           avatar_url: string | null
+          banner_url: string | null
           bio: string | null
           role: 'user' | 'admin' | 'etudiant' | 'expert_ia' | 'professeur'
           xp: number
@@ -25,6 +26,7 @@ export type Database = {
           id: string
           username: string
           avatar_url?: string | null
+          banner_url?: string | null
           bio?: string | null
           role?: 'user' | 'admin' | 'etudiant' | 'expert_ia' | 'professeur'
           xp?: number
@@ -34,6 +36,7 @@ export type Database = {
         Update: {
           username?: string
           avatar_url?: string | null
+          banner_url?: string | null
           bio?: string | null
           xp?: number
           games_played?: number

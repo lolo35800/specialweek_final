@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import type { Profile as ProfileType, Post } from '../lib/supabase'
-import { getProfileByUsername } from '../services/profileService'
+import { getProfileByUsername, updateProfile } from '../services/profileService'
 import { getPostsByUser } from '../services/postService'
+import { uploadImage } from '../services/storageService'
 import { PostCard } from '../components/cards/PostCard'
 import { MasonryGrid } from '../components/masonry/MasonryGrid'
 import { BadgeGrid } from '../components/badges/BadgeGrid'
@@ -39,7 +40,7 @@ type PostWithProfile = Post & {
 
 export default function Profile() {
   const { username } = useParams<{ username: string }>()
-  const { profile: currentUserProfile } = useAuth()
+  const { profile: currentUserProfile, refreshProfile } = useAuth()
   const [profile, setProfile] = useState<ProfileType | null>(null)
   const [posts, setPosts] = useState<PostWithProfile[]>([])
   const [loading, setLoading] = useState(true)
@@ -50,7 +51,7 @@ export default function Profile() {
   const [pendingRequest, setPendingRequest] = useState<UserRole | null>(null)
   const [roleRequestLoading, setRoleRequestLoading] = useState(false)
 
-  useEffect(() => {
+  const load = async () => {
     if (!username) return
     async function load() {
       try {
@@ -76,9 +77,16 @@ export default function Profile() {
       } finally {
         setLoading(false)
       }
+    } catch (e) {
+      console.error('Erreur chargement profil:', e)
+    } finally {
+      setLoading(false)
     }
+  }
+
+  useEffect(() => {
     load()
-  }, [username])
+  }, [username, currentUserProfile?.id])
 
   if (loading) return <div className="profile-loading"><div className="feed-spinner" /></div>
   if (!profile) return (
@@ -88,7 +96,6 @@ export default function Profile() {
     </div>
   )
 
-  const totalLikes = posts.reduce((acc, p) => acc + p.likes_count, 0)
   const totalPlays = posts.reduce((acc, p) => acc + p.plays_count, 0)
   const isOwnProfile = currentUserProfile?.id === profile.id
   const hasSpecialRole = profile.role !== 'user'
@@ -135,18 +142,51 @@ export default function Profile() {
             </span>
           )}
         </div>
-        <div className="profile-stats">
-          <div className="profile-stat">
-            <span className="profile-stat-value">{posts.length}</span>
-            <span className="profile-stat-label">posts</span>
+
+        <div className="profile-hero">
+          {currentUserProfile?.id === profile.id && (
+            <button 
+              className="btn btn-outline profile-edit-btn" 
+              onClick={() => setIsEditModalOpen(true)}
+            >
+              Modifier le profil
+            </button>
+          )}
+
+          <div className="profile-avatar-lg">
+            {profile.avatar_url
+              ? <img src={profile.avatar_url} alt="" />
+              : <span>{profile.username[0].toUpperCase()}</span>
+            }
           </div>
-          <div className="profile-stat">
-            <span className="profile-stat-value">{totalLikes}</span>
-            <span className="profile-stat-label">likes reçus</span>
+          <div className="profile-info">
+            <h1>{profile.username}</h1>
+            <div className="profile-level">
+              <span className="level-badge">Niveau {Math.floor(Math.sqrt((profile.xp || 0) / 100)) + 1}</span>
+              <div className="xp-bar-container">
+                <div 
+                  className="xp-bar-fill" 
+                  style={{ width: `${((profile.xp || 0) % 100)}%` }} 
+                />
+                <span className="xp-text">{profile.xp || 0} XP</span>
+              </div>
+            </div>
+            {profile.bio && <p className="profile-bio">{profile.bio}</p>}
+            {profile.role === 'admin' && <span className="badge badge-admin">Admin</span>}
           </div>
-          <div className="profile-stat">
-            <span className="profile-stat-value">{totalPlays}</span>
-            <span className="profile-stat-label">parties jouées</span>
+          <div className="profile-stats">
+            <div className="profile-stat">
+              <span className="profile-stat-value">{posts.length}</span>
+              <span className="profile-stat-label">Défis créés</span>
+            </div>
+            <div className="profile-stat">
+              <span className="profile-stat-value">{profile.games_played || 0}</span>
+              <span className="profile-stat-label">Participations</span>
+            </div>
+            <div className="profile-stat">
+              <span className="profile-stat-value">{totalPlays}</span>
+              <span className="profile-stat-label">Vues reçues</span>
+            </div>
           </div>
         </div>
       </div>
@@ -221,6 +261,154 @@ export default function Profile() {
             ))}
           </MasonryGrid>
         )}
+      </div>
+    </div>
+  )
+}
+
+function EditProfileModal({ profile, onClose, onSuccess }: { profile: ProfileType, onClose: () => void, onSuccess: () => void }) {
+  const [username, setUsername] = useState(profile.username)
+  const [bio, setBio] = useState(profile.bio || '')
+  const [avatarUrl, setAvatarUrl] = useState(profile.avatar_url || '')
+  const [bannerUrl, setBannerUrl] = useState(profile.banner_url || '')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'avatar' | 'banner') => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setLoading(true)
+    setError(null)
+    try {
+      // On utilise avatars/userId (avatar) ou avatars/banner-userId (bannière)
+      const path = type === 'avatar' ? `avatars/${profile.id}` : `avatars/banner-${profile.id}`
+      const publicUrl = await uploadImage(file, path)
+      
+      if (type === 'avatar') setAvatarUrl(publicUrl)
+      else setBannerUrl(publicUrl)
+    } catch (err: any) {
+      setError("Erreur lors de l'upload: " + err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+
+    try {
+      const updates: any = {}
+      if (username !== profile.username) updates.username = username
+      if (bio !== (profile.bio || '')) updates.bio = bio
+      if (avatarUrl !== (profile.avatar_url || '')) updates.avatar_url = avatarUrl
+      if (bannerUrl !== (profile.banner_url || '')) updates.banner_url = bannerUrl
+
+      if (Object.keys(updates).length === 0) {
+        onClose()
+        return
+      }
+
+      const { error } = await updateProfile(profile.id, updates)
+
+      if (error) throw new Error(error)
+      onSuccess()
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="profile-edit-overlay" onClick={onClose}>
+      <div className="profile-edit-modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-header">
+          <h3>Modifier le profil</h3>
+          <button className="btn-close" onClick={onClose}>&times;</button>
+        </div>
+        
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Pseudo</label>
+            <input 
+              className="input" 
+              value={username} 
+              onChange={e => setUsername(e.target.value)} 
+              placeholder="Pseudo"
+              required
+            />
+          </div>
+          
+          <div className="form-group">
+            <label>Bio</label>
+            <textarea 
+              className="input" 
+              value={bio} 
+              onChange={e => setBio(e.target.value)} 
+              placeholder="Raconte-nous quelque chose sur toi..."
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Avatar</label>
+            <div className="upload-field">
+              {avatarUrl && <img src={avatarUrl} alt="Preview" className="upload-preview" />}
+              <div className="upload-controls">
+                <input 
+                  className="input" 
+                  value={avatarUrl} 
+                  onChange={e => setAvatarUrl(e.target.value)} 
+                  placeholder="URL de l'image..."
+                />
+                <label className="btn btn-secondary btn-upload">
+                  📁 Charger un fichier
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={e => handleFileUpload(e, 'avatar')} 
+                    hidden 
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>Bannière</label>
+            <div className="upload-field">
+              {bannerUrl && <img src={bannerUrl} alt="Preview" className="upload-preview banner" />}
+              <div className="upload-controls">
+                <input 
+                  className="input" 
+                  value={bannerUrl} 
+                  onChange={e => setBannerUrl(e.target.value)} 
+                  placeholder="URL de la bannière..."
+                />
+                <label className="btn btn-secondary btn-upload">
+                  📁 Charger un fichier
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={e => handleFileUpload(e, 'banner')} 
+                    hidden 
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {error && <p className="form-error">{error}</p>}
+
+          <div className="form-actions">
+            <button type="button" className="btn btn-outline" onClick={onClose}>Annuler</button>
+            <button type="submit" className="btn btn-primary" disabled={loading}>
+              {loading ? 'Enregistrement...' : 'Enregistrer'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   )

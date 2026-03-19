@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import './Quiz.css'
 import { useAuth } from '../contexts/AuthContext'
+import { submitScore as submitGameScore } from '../services/scoreService'
 import { unlockFakeOrRealBadges, type Badge } from '../data/badges'
 import { BadgeUnlockModal } from '../components/badges/BadgeUnlockModal'
 
@@ -53,23 +53,19 @@ export default function FakeOrReal() {
     setValidated(false)
   }
 
-  const submitScore = async () => {
-    if (!username.trim()) return
+  const handleScoreSubmit = async () => {
+    const finalUsername = profile?.username || username.trim() || 'Anonyme'
     try {
-      await fetch('http://localhost:8000/scores', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username,
-          score,
-          total: items.length,
-          module: 'fake_or_real'
-        })
+      await submitGameScore({
+        username: finalUsername,
+        score,
+        total: items.length,
+        module: 'fake_or_real'
       })
       setSubmitted(true)
       fetchLeaderboard()
     } catch (e) {
-      console.error(e)
+      console.error('Erreur submission score:', e)
     }
   }
 
@@ -83,15 +79,24 @@ export default function FakeOrReal() {
     }
   }
 
+  const [submittedAutomatic, setSubmittedAutomatic] = useState(false)
+
   useEffect(() => {
     if (index >= items.length) {
       fetchLeaderboard()
+      
+      // Auto-submit if logged in and not already submitted
+      if (profile && !submittedAutomatic && !submitted) {
+        handleScoreSubmit()
+        setSubmittedAutomatic(true)
+      }
+
       if (profile?.id) {
         const earned = unlockFakeOrRealBadges(profile.id, score, items.length)
         if (earned.length > 0) setNewBadges(earned)
       }
     }
-  }, [index, items.length, profile?.id, score])
+  }, [index, items.length, profile, score, submitted, submittedAutomatic])
 
   if (index >= items.length) {
     return (
@@ -125,27 +130,29 @@ export default function FakeOrReal() {
             })}
           </div>
 
-          <div className="score-submission" style={{marginTop: '2rem', borderTop: '1px solid var(--border)'}}>
-            {!submitted ? (
-              <div style={{ marginTop: '20px', padding: '20px', background: 'rgba(20, 184, 166, 0.08)', borderRadius: '12px', border: '1px solid rgba(20, 184, 166, 0.25)' }}>
-                <h3 style={{marginBottom: '10px', color: '#2dd4bf'}}>Sauvegarde ton score !</h3>
-                <div style={{ display: 'flex', gap: '10px' }}>
-                  <input 
-                    type="text" 
-                    placeholder="Ton pseudo" 
-                    value={username} 
-                    onChange={(e) => setUsername(e.target.value)}
-                    style={{ padding: '10px', flex: 1, borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--field)', color: 'var(--text-h)' }}
-                  />
-                  <button className="btn-primary" onClick={submitScore} disabled={!username.trim()}>Valider</button>
+          {!profile && (
+            <div className="score-submission" style={{marginTop: '2rem', borderTop: '1px solid var(--border)'}}>
+              {!submitted ? (
+                <div style={{ marginTop: '20px', padding: '20px', background: 'rgba(20, 184, 166, 0.08)', borderRadius: '12px', border: '1px solid rgba(20, 184, 166, 0.25)' }}>
+                  <h3 style={{marginBottom: '10px', color: '#2dd4bf'}}>Sauvegarde ton score !</h3>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <input 
+                      type="text" 
+                      placeholder="Ton pseudo" 
+                      value={username} 
+                      onChange={(e) => setUsername(e.target.value)}
+                      style={{ padding: '10px', flex: 1, borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--field)', color: 'var(--text-h)' }}
+                    />
+                    <button className="btn-primary" onClick={handleScoreSubmit} disabled={!profile && !username.trim()}>Valider</button>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div style={{ marginTop: '20px', padding: '15px', background: 'var(--success-bg)', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.25)', textAlign: 'center' }}>
-                <p style={{ color: 'var(--success)', fontWeight: 'bold' }}>✅ Ton score a été sauvegardé avec succès !</p>
-              </div>
-            )}
-          </div>
+              ) : (
+                <div style={{ marginTop: '20px', padding: '15px', background: 'var(--success-bg)', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.25)', textAlign: 'center' }}>
+                  <p style={{ color: 'var(--success)', fontWeight: 'bold' }}>✅ Ton score a été sauvegardé avec succès !</p>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="leaderboard" style={{ marginTop: '30px', background: 'var(--bg-elevated)', padding: '25px', borderRadius: '12px', border: '1px solid var(--border)' }}>
             <h2 style={{display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px'}}><span style={{fontSize: '1.5rem'}}>🏆</span> Le Top 10</h2>

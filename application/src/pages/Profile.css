@@ -14,44 +14,200 @@
   color: var(--text-muted);
 }
 
+.profile-header-container {
+  position: relative;
+  width: 100%;
+}
+
+.profile-banner {
+  position: relative;
+  height: 240px;
+  width: 100%;
+  overflow: hidden;
+  background: var(--gradient-subtle);
+}
+
+.profile-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-banner-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-subtle);
+}
+
+.profile-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 40%, var(--bg) 95%);
+}
+
 .profile-hero {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  padding: 48px 24px 32px;
+  padding: 0 24px 32px;
   text-align: center;
-  border-bottom: 1px solid var(--border);
+  margin-top: -60px; /* Pull up over the banner */
   position: relative;
+  z-index: 10;
 }
 
-.profile-hero::before {
-  content: '';
+.profile-edit-btn {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 160px;
-  background: var(--gradient-subtle);
-  pointer-events: none;
+  top: -40px;
+  right: 24px;
+  z-index: 20;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .profile-avatar-lg {
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   background: var(--gradient);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 38px;
+  font-size: 48px;
   font-weight: 800;
   color: white;
   overflow: hidden;
-  box-shadow: 0 0 32px rgba(20, 184, 166, 0.3);
-  position: relative;
-  z-index: 1;
-  border: 3px solid var(--bg);
+  box-shadow: 0 4px 32px rgba(20, 184, 166, 0.4);
+  border: 4px solid var(--bg);
+}
+
+/* Modal Styling */
+.profile-edit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.profile-edit-modal {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow);
+  animation: fadeInUp 0.4s var(--ease-out);
+}
+
+.modal-header {
+  padding: 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.profile-edit-modal form {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.upload-field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--border);
+}
+
+.upload-preview {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+  align-self: flex-start;
+}
+
+.upload-preview.banner {
+  width: 100%;
+  height: 100px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.upload-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.upload-controls .input {
+  flex: 1;
+}
+
+.btn-upload {
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  padding: 8px 16px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: all 0.2s;
+}
+
+.btn-upload:hover {
+  background: var(--border);
+  transform: translateY(-1px);
 }
 
 .profile-avatar-lg img {
