@@ -168,12 +168,18 @@ function EditProfileModal({ profile, onClose, onSuccess }: { profile: ProfileTyp
     setError(null)
 
     try {
-      const { error } = await updateProfile(profile.id, {
-        username,
-        bio,
-        avatar_url: avatarUrl,
-        banner_url: bannerUrl
-      })
+      const updates: any = {}
+      if (username !== profile.username) updates.username = username
+      if (bio !== (profile.bio || '')) updates.bio = bio
+      if (avatarUrl !== (profile.avatar_url || '')) updates.avatar_url = avatarUrl
+      if (bannerUrl !== (profile.banner_url || '')) updates.banner_url = bannerUrl
+
+      if (Object.keys(updates).length === 0) {
+        onClose()
+        return
+      }
+
+      const { error } = await updateProfile(profile.id, updates)
 
       if (error) throw new Error(error)
       onSuccess()
