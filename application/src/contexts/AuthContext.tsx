@@ -223,10 +223,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const isAdmin = profile?.role === 'admin' || user?.email === 'sebastien.ltrt@gmail.com'
+  const isBanned = profile?.is_banned === true && !isAdmin
 
   return (
     <AuthContext.Provider value={{ user, session, profile, loading, signUp, signIn, signInWithGoogle, signOut, isAdmin }}>
-      {children}
+      {isBanned ? (
+        <div style={{
+          position: 'fixed', inset: 0,
+          background: 'var(--bg)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          flexDirection: 'column', gap: 16, padding: 24, zIndex: 9999,
+        }}>
+          <div style={{ fontSize: 56 }}>🚫</div>
+          <h2 style={{ color: 'var(--danger)', fontFamily: 'var(--heading)', margin: 0 }}>Compte banni</h2>
+          <p style={{ color: 'var(--text-muted)', textAlign: 'center', maxWidth: 360, margin: 0 }}>
+            Ton compte a été suspendu par un administrateur pour non-respect des règles de la plateforme.
+          </p>
+          <button
+            className="btn btn-outline"
+            onClick={async () => { await supabase.auth.signOut() }}
+          >
+            Se déconnecter
+          </button>
+        </div>
+      ) : children}
       {needsMfa && (
         <MfaGate onSignOut={async () => { await supabase.auth.signOut() }} onDone={async () => {
           // Re-fetch AAL pour confirmer qu'on est bien à aal2

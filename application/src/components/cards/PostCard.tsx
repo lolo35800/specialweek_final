@@ -3,7 +3,8 @@ import type { Post } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import { likePost, unlikePost } from '../../services/likeService'
 import { deletePost, flagPost } from '../../services/postService'
-import { useState } from 'react'
+import { reportPost, hasReportedPost } from '../../services/reportService'
+import { useState, useEffect } from 'react'
 import './PostCard.css'
 
 interface Props {
@@ -18,6 +19,16 @@ export function PostCard({ post, likedByMe = false, onLikeToggle, onDelete }: Pr
   const [liked, setLiked] = useState(likedByMe)
   const [flagged, setFlagged] = useState(post.is_flagged)
   const [deleted, setDeleted] = useState(false)
+  const [showReportForm, setShowReportForm] = useState(false)
+  const [reportReason, setReportReason] = useState('')
+  const [reported, setReported] = useState(false)
+  const [reportLoading, setReportLoading] = useState(false)
+
+  useEffect(() => {
+    if (user && !isAdmin) {
+      hasReportedPost(post.id, user.id).then(setReported)
+    }
+  }, [user?.id, post.id, isAdmin])
   // Si likedByMe=true mais likes_count=0, le RPC DB n'a pas encore mis à jour → affiche au moins 1
   const [likesCount, setLikesCount] = useState(
     likedByMe && post.likes_count === 0 ? 1 : post.likes_count
@@ -49,6 +60,17 @@ export function PostCard({ post, likedByMe = false, onLikeToggle, onDelete }: Pr
     await deletePost(post.id)
     setDeleted(true)
     onDelete?.(post.id)
+  }
+
+  async function handleReport(e: React.MouseEvent) {
+    e.preventDefault(); e.stopPropagation()
+    if (!user || !reportReason.trim()) return
+    setReportLoading(true)
+    await reportPost(post.id, user.id, reportReason.trim())
+    setReported(true)
+    setShowReportForm(false)
+    setReportReason('')
+    setReportLoading(false)
   }
 
   async function handleAdminFlag(e: React.MouseEvent) {
@@ -131,8 +153,54 @@ export function PostCard({ post, likedByMe = false, onLikeToggle, onDelete }: Pr
               {liked ? '❤️' : '🤍'} {likesCount}
             </button>
             <span className="post-card-plays">▶ {post.plays_count}</span>
+
+            {/* Bouton signaler — utilisateurs non-admin uniquement */}
+            {user && !isAdmin && (
+              <div onClick={e => { e.preventDefault(); e.stopPropagation() }}>
+                {reported ? (
+                  <span className="post-card-reported">✓ Signalé</span>
+                ) : (
+                  <button
+                    className="post-card-report-btn"
+                    onClick={e => { e.preventDefault(); e.stopPropagation(); setShowReportForm(v => !v) }}
+                    title="Signaler ce post"
+                  >
+                    ⚑
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
+
+        {/* Formulaire de signalement inline */}
+        {showReportForm && (
+          <div className="post-card-report-form" onClick={e => { e.preventDefault(); e.stopPropagation() }}>
+            <textarea
+              className="post-card-report-textarea"
+              placeholder="Explique pourquoi ce post est problématique..."
+              value={reportReason}
+              onChange={e => setReportReason(e.target.value)}
+              rows={3}
+              maxLength={500}
+            />
+            <div className="post-card-report-actions">
+              <button
+                className="post-card-admin-btn delete"
+                onClick={handleReport}
+                disabled={!reportReason.trim() || reportLoading}
+              >
+                {reportLoading ? 'Envoi...' : 'Envoyer'}
+              </button>
+              <button
+                className="post-card-admin-btn unflag"
+                onClick={e => { e.preventDefault(); e.stopPropagation(); setShowReportForm(false); setReportReason('') }}
+              >
+                Annuler
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </Link>
   )

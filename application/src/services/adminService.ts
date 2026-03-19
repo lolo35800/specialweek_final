@@ -30,6 +30,14 @@ export async function updateUserRole(userId: string, role: UserRole) {
   if (error) throw error
 }
 
+export async function banUser(userId: string, banned: boolean) {
+  const { error } = await supabase
+    .from('profiles')
+    .update({ is_banned: banned })
+    .eq('id', userId)
+  if (error) throw error
+}
+
 export async function deleteUserAccount(userId: string) {
   // Supprime le profil (cascade vers les posts via FK)
   const { error } = await supabase

@@ -18,6 +18,7 @@ export type Database = {
           xp: number
           games_played: number
           posts_created: number
+          is_banned: boolean
           created_at: string
         }
         Insert: {

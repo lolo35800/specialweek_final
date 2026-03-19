@@ -4,17 +4,18 @@ import type { Post } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { getAllPostsAdmin, deletePost, flagPost } from '../services/postService'
 import {
-  getAllUsers, updateUserRole, deleteUserAccount,
+  getAllUsers, updateUserRole, deleteUserAccount, banUser,
   getRoleRequests, approveRoleRequest, rejectRoleRequest,
   type UserRole, type RoleRequest,
 } from '../services/adminService'
+import { getPostReports } from '../services/reportService'
 import './Admin.css'
 
 type PostWithProfile = Post & {
   profiles: { username: string; avatar_url: string | null }
 }
 
-type Tab = 'posts' | 'users' | 'roles'
+type Tab = 'posts' | 'users' | 'roles' | 'reports'
 
 const ROLE_LABELS: Record<UserRole, string> = {
   user: 'Utilisateur',
@@ -50,6 +51,10 @@ export default function Admin() {
   const [requests, setRequests] = useState<RoleRequest[]>([])
   const [fetchingRequests, setFetchingRequests] = useState(false)
 
+  // Reports
+  const [reports, setReports] = useState<any[]>([])
+  const [fetchingReports, setFetchingReports] = useState(false)
+
   useEffect(() => {
     if (!isAdmin) return
     getAllPostsAdmin().then(data => {
@@ -70,6 +75,12 @@ export default function Admin() {
     getRoleRequests().then(data => { setRequests(data); setFetchingRequests(false) })
   }, [tab, isAdmin])
 
+  useEffect(() => {
+    if (!isAdmin || tab !== 'reports') return
+    setFetchingReports(true)
+    getPostReports().then(data => { setReports(data); setFetchingReports(false) })
+  }, [tab, isAdmin])
+
   // ─── Posts handlers ───────────────────────────────────────
   async function handleDeletePost(postId: string) {
     if (!confirm('Supprimer ce post définitivement ?')) return
@@ -86,6 +97,11 @@ export default function Admin() {
   async function handleRoleChange(userId: string, role: UserRole) {
     await updateUserRole(userId, role)
     setUsers(us => us.map(u => u.id === userId ? { ...u, role } : u))
+  }
+
+  async function handleBan(userId: string, currentBanned: boolean) {
+    await banUser(userId, !currentBanned)
+    setUsers(us => us.map(u => u.id === userId ? { ...u, is_banned: !currentBanned } : u))
   }
 
   async function handleDeleteUser(userId: string, username: string) {
@@ -140,6 +156,10 @@ export default function Admin() {
         <button className={`admin-tab ${tab === 'roles' ? 'active' : ''}`} onClick={() => setTab('roles')}>
           🎓 Demandes de rôle
           {pendingCount > 0 && <span className="admin-badge">{pendingCount}</span>}
+        </button>
+        <button className={`admin-tab ${tab === 'reports' ? 'active' : ''}`} onClick={() => setTab('reports')}>
+          ⚑ Signalements
+          {reports.length > 0 && <span className="admin-badge">{reports.length}</span>}
         </button>
       </div>
 
@@ -265,9 +285,61 @@ export default function Admin() {
                         </select>
                       </td>
                       <td>
-                        <button className="btn btn-danger" onClick={() => handleDeleteUser(u.id, u.username)}>
-                          Supprimer
-                        </button>
+                        <div className="admin-actions">
+                          <button
+                            className={`btn ${u.is_banned ? 'btn-outline' : 'btn-warning'}`}
+                            onClick={() => handleBan(u.id, u.is_banned)}
+                          >
+                            {u.is_banned ? '✅ Débannir' : '🚫 Bannir'}
+                          </button>
+                          <button className="btn btn-danger" onClick={() => handleDeleteUser(u.id, u.username)}>
+                            Supprimer
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── REPORTS ── */}
+      {tab === 'reports' && (
+        <div>
+          {fetchingReports ? (
+            <div className="admin-loading"><div className="feed-spinner" /></div>
+          ) : reports.length === 0 ? (
+            <div className="admin-empty-requests"><p>✅ Aucun signalement.</p></div>
+          ) : (
+            <div className="admin-table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Post signalé</th>
+                    <th>Signalé par</th>
+                    <th>Raison</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reports.map((r: any) => (
+                    <tr key={r.id}>
+                      <td>
+                        <Link to={`/post/${r.post_id}`} className="admin-post-link">
+                          {r.posts?.title ?? r.post_id}
+                        </Link>
+                      </td>
+                      <td>
+                        <Link to={`/profile/${r.profiles?.username}`} className="admin-post-link">
+                          {r.profiles?.username ?? '—'}
+                        </Link>
+                      </td>
+                      <td className="admin-report-reason">{r.reason}</td>
+                      <td style={{ whiteSpace: 'nowrap', color: 'var(--text-muted)', fontSize: 13 }}>
+                        {new Date(r.created_at).toLocaleDateString('fr-FR')}
                       </td>
                     </tr>
                   ))}

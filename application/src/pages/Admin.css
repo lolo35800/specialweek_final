@@ -279,3 +279,74 @@
   color: var(--text-muted);
   font-size: 1rem;
 }
+
+/* Ban button */
+.btn-warning {
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--warning);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+.btn-warning:hover { opacity: 0.75; }
+
+/* Banned user row */
+tr:has(.btn-warning + .btn-danger) td { opacity: 0.7; }
+
+/* Report reason cell */
+.admin-report-reason {
+  max-width: 320px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .admin-page { padding: 16px 12px; }
+
+  /* Tabs scrollable horizontalement */
+  .admin-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0;
+    gap: 0;
+  }
+  .admin-tabs::-webkit-scrollbar { display: none; }
+  .admin-tab { white-space: nowrap; padding: 10px 14px; font-size: 0.82rem; }
+
+  /* Table scrollable */
+  .admin-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .admin-table { min-width: 600px; }
+  .admin-table th, .admin-table td { padding: 10px 10px; font-size: 13px; }
+
+  /* Users table min-width */
+  .admin-table.users-table { min-width: 700px; }
+
+  /* Role select plus petit */
+  .admin-role-select { font-size: 0.78rem; padding: 4px 8px; }
+
+  /* Request cards stack */
+  .admin-request-card { flex-direction: column; align-items: flex-start; }
+  .admin-request-info { flex-direction: column; gap: 12px; }
+
+  /* Search full width */
+  .admin-search { max-width: 100%; }
+
+  /* Admin header */
+  .admin-header h1 { font-size: 22px; }
+}
+
+@media (max-width: 480px) {
+  .admin-actions { flex-direction: column; gap: 4px; align-items: stretch; }
+  .admin-actions .btn { text-align: center; font-size: 0.78rem; padding: 6px 8px; }
+  .admin-request-actions { flex-direction: column; width: 100%; }
+  .admin-request-actions .btn { width: 100%; justify-content: center; }
+}
