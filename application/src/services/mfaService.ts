@@ -1,7 +1,7 @@
 import { supabase } from '../lib/supabase'
 
 export async function enrollMfa(): Promise<{ qr: string; secret: string; factorId: string; error: string | null }> {
-  const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp', issuer: 'VériIA' })
+  const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp', issuer: 'Verif-IA' })
   if (error || !data) return { qr: '', secret: '', factorId: '', error: error?.message ?? 'Erreur' }
   return {
     qr: data.totp.qr_code,

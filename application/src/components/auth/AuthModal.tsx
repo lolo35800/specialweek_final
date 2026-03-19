@@ -70,7 +70,7 @@ export function AuthModal({ onClose }: Props) {
               <p className="auth-subtitle">
                 {mode === 'login'
                   ? 'Content de te revoir !'
-                  : 'Rejoins la communauté VériIA'}
+                  : 'Rejoins la communauté Verif-IA'}
               </p>
             </div>
 

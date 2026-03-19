@@ -57,6 +57,16 @@ export async function createPost(
     .single()
 
   if (error) throw error
+  
+  // Award XP and increment posts_created
+  const { data: profile } = await supabase.from('profiles').select('xp, posts_created').eq('id', authorId).single()
+  if (profile) {
+    await supabase.from('profiles').update({
+      xp: (profile.xp || 0) + 200,
+      posts_created: (profile.posts_created || 0) + 1
+    }).eq('id', authorId)
+  }
+
   return data as Post
 }
 

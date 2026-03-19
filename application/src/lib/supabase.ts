@@ -15,6 +15,9 @@ export type Database = {
           avatar_url: string | null
           bio: string | null
           role: 'user' | 'admin'
+          xp: number
+          games_played: number
+          posts_created: number
           created_at: string
         }
         Insert: {
@@ -23,11 +26,17 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           role?: 'user' | 'admin'
+          xp?: number
+          games_played?: number
+          posts_created?: number
         }
         Update: {
           username?: string
           avatar_url?: string | null
           bio?: string | null
+          xp?: number
+          games_played?: number
+          posts_created?: number
         }
       }
       posts: {
