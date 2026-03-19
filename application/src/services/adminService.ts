@@ -83,12 +83,17 @@ export async function getUserRoleRequest(userId: string): Promise<RoleRequest | 
 }
 
 export async function approveRoleRequest(requestId: string, userId: string, role: UserRole) {
-  await updateUserRole(userId, role)
+  const { error: roleError } = await supabase
+    .from('profiles')
+    .update({ role })
+    .eq('id', userId)
+  if (roleError) console.error('approveRoleRequest: updateUserRole failed', roleError)
+
   const { error } = await supabase
     .from('role_requests')
     .update({ status: 'approved' })
     .eq('id', requestId)
-  if (error) throw error
+  if (error) console.error('approveRoleRequest: update status failed', error)
 }
 
 export async function rejectRoleRequest(requestId: string) {

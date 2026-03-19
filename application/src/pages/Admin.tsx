@@ -112,14 +112,24 @@ export default function Admin() {
 
   // ─── Role requests handlers ───────────────────────────────
   async function handleApprove(req: RoleRequest) {
-    await approveRoleRequest(req.id, req.user_id, req.requested_role)
-    setRequests(rs => rs.filter(r => r.id !== req.id))
-    setUsers([]) // reset pour forcer rechargement
+    try {
+      await approveRoleRequest(req.id, req.user_id, req.requested_role)
+      setRequests(rs => rs.filter(r => r.id !== req.id))
+      setUsers([])
+    } catch (err) {
+      console.error('handleApprove error:', err)
+      alert('Erreur lors de l\'approbation. Vérifie la console.')
+    }
   }
 
   async function handleReject(req: RoleRequest) {
-    await rejectRoleRequest(req.id)
-    setRequests(rs => rs.filter(r => r.id !== req.id))
+    try {
+      await rejectRoleRequest(req.id)
+      setRequests(rs => rs.filter(r => r.id !== req.id))
+    } catch (err) {
+      console.error('handleReject error:', err)
+      alert('Erreur lors du refus. Vérifie la console.')
+    }
   }
 
   if (loading) return <div className="admin-loading"><div className="feed-spinner" /></div>
