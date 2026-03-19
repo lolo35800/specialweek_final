@@ -49,10 +49,10 @@ export default function Home() {
       {/* ── HERO ─────────────────────────────────── */}
       <section className="home-hero">
         <div className="home-hero-content">
-          <div className="home-hero-tag">Portail pédagogique</div>
+          <div className="home-hero-tag">Portail pédagogique • <span className="control-hint">Contrôle le fond avec ZQSD</span></div>
           <h1 className="home-hero-title">
             Comprends l'IA.<br />
-            <span className="gradient-text">Ne te laisse plus avoir.</span>
+            <span className="gradient-text">Ne te laisse plus avoir<span id="car-spawn-point"></span></span>
           </h1>
           <p className="home-hero-sub">
             Cours, jeux et actus pour apprendre à détecter la désinformation —

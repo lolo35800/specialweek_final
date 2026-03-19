@@ -1,0 +1,15 @@
+.racing-bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 1;
+}
+
+.home-hero {
+  position: relative; /* Ensure it stays above the canvas if needed, though canvas is z-index -1 */
+  overflow: visible;
+}

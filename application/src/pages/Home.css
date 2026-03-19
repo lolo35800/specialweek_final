@@ -21,6 +21,7 @@
 
 .home-hero-tag {
   display: inline-flex;
+  align-items: center;
   padding: 6px 16px;
   border-radius: 999px;
   background: var(--primary-bg);
@@ -31,7 +32,15 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   width: fit-content;
+  gap: 8px;
   animation: fadeInUp 0.6s 0.1s var(--ease-out) both;
+}
+
+.control-hint {
+  color: var(--accent);
+  opacity: 0.8;
+  font-weight: 800;
+  letter-spacing: 0.05em;
 }
 
 .home-hero-title {

@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import type { Profile as ProfileType, Post } from '../lib/supabase'
 import { getProfileByUsername, updateProfile } from '../services/profileService'
 import { getPostsByUser } from '../services/postService'
+import { uploadImage } from '../services/storageService'
 import { PostCard } from '../components/cards/PostCard'
 import { MasonryGrid } from '../components/masonry/MasonryGrid'
 import { BadgeGrid } from '../components/badges/BadgeGrid'
@@ -162,6 +163,26 @@ function EditProfileModal({ profile, onClose, onSuccess }: { profile: ProfileTyp
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'avatar' | 'banner') => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setLoading(true)
+    setError(null)
+    try {
+      // On utilise avatars/userId (avatar) ou avatars/banner-userId (bannière)
+      const path = type === 'avatar' ? `avatars/${profile.id}` : `avatars/banner-${profile.id}`
+      const publicUrl = await uploadImage(file, path)
+      
+      if (type === 'avatar') setAvatarUrl(publicUrl)
+      else setBannerUrl(publicUrl)
+    } catch (err: any) {
+      setError("Erreur lors de l'upload: " + err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -221,23 +242,51 @@ function EditProfileModal({ profile, onClose, onSuccess }: { profile: ProfileTyp
           </div>
 
           <div className="form-group">
-            <label>URL de l'avatar</label>
-            <input 
-              className="input" 
-              value={avatarUrl} 
-              onChange={e => setAvatarUrl(e.target.value)} 
-              placeholder="https://..."
-            />
+            <label>Avatar</label>
+            <div className="upload-field">
+              {avatarUrl && <img src={avatarUrl} alt="Preview" className="upload-preview" />}
+              <div className="upload-controls">
+                <input 
+                  className="input" 
+                  value={avatarUrl} 
+                  onChange={e => setAvatarUrl(e.target.value)} 
+                  placeholder="URL de l'image..."
+                />
+                <label className="btn btn-secondary btn-upload">
+                  📁 Charger un fichier
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={e => handleFileUpload(e, 'avatar')} 
+                    hidden 
+                  />
+                </label>
+              </div>
+            </div>
           </div>
 
           <div className="form-group">
-            <label>URL de la bannière</label>
-            <input 
-              className="input" 
-              value={bannerUrl} 
-              onChange={e => setBannerUrl(e.target.value)} 
-              placeholder="https://..."
-            />
+            <label>Bannière</label>
+            <div className="upload-field">
+              {bannerUrl && <img src={bannerUrl} alt="Preview" className="upload-preview banner" />}
+              <div className="upload-controls">
+                <input 
+                  className="input" 
+                  value={bannerUrl} 
+                  onChange={e => setBannerUrl(e.target.value)} 
+                  placeholder="URL de la bannière..."
+                />
+                <label className="btn btn-secondary btn-upload">
+                  📁 Charger un fichier
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={e => handleFileUpload(e, 'banner')} 
+                    hidden 
+                  />
+                </label>
+              </div>
+            </div>
           </div>
 
           {error && <p className="form-error">{error}</p>}
