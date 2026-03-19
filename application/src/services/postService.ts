@@ -87,6 +87,7 @@ export async function getAllPostsAdmin(): Promise<PostWithProfile[]> {
   const { data, error } = await supabase
     .from('posts')
     .select('*, profiles(username, avatar_url)')
+    .order('is_flagged', { ascending: false })
     .order('created_at', { ascending: false })
 
   if (error) throw error

@@ -15,10 +15,11 @@ export type Database = {
           avatar_url: string | null
           banner_url: string | null
           bio: string | null
-          role: 'user' | 'admin'
+          role: 'user' | 'admin' | 'etudiant' | 'expert_ia' | 'professeur'
           xp: number
           games_played: number
           posts_created: number
+          is_banned: boolean
           created_at: string
         }
         Insert: {
@@ -27,7 +28,7 @@ export type Database = {
           avatar_url?: string | null
           banner_url?: string | null
           bio?: string | null
-          role?: 'user' | 'admin'
+          role?: 'user' | 'admin' | 'etudiant' | 'expert_ia' | 'professeur'
           xp?: number
           games_played?: number
           posts_created?: number

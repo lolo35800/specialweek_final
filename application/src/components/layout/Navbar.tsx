@@ -1,13 +1,14 @@
 import { useState, useRef, useEffect } from 'react'
 import { NavLink, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+
 import { useTheme } from '../../contexts/ThemeContext'
 import { AuthModal } from '../auth/AuthModal'
 import './Navbar.css'
 
 export default function Navbar() {
   const navigate = useNavigate()
-  const { user, profile, signOut } = useAuth()
+  const { user, profile, signOut, isAdmin } = useAuth()
   const { theme, toggle } = useTheme()
   const [showAuth, setShowAuth] = useState(false)
   const [showProfile, setShowProfile] = useState(false)
@@ -122,6 +123,11 @@ export default function Navbar() {
                     <Link to="/create" className="navbar-dropdown-item">
                       Créer un post
                     </Link>
+                    {isAdmin && (
+                      <Link to="/admin" className="navbar-dropdown-item">
+                        Admin
+                      </Link>
+                    )}
                     <Link to="/settings" className="navbar-dropdown-item">
                       Modifier le profil
                     </Link>

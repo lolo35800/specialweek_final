@@ -174,7 +174,7 @@ export default function FakeOrReal() {
             <button className="btn-primary" style={{flex: 1, padding: '15px', maxWidth: '250px'}} onClick={() => {
               setIndex(0); setChosen(null); setAnswers([]); setSubmitted(false); setUsername(''); setLeaderboard([]); setNewBadges([]);
             }}>Rejouer</button>
-            <button className="btn-secondary" style={{flex: 1, padding: '15px', maxWidth: '250px', background: 'transparent', border: '1px solid rgba(20,184,166,0.3)', color: '#2dd4bf', borderRadius: '30px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s ease'}} onClick={() => navigate('/')}>Retour au menu</button>
+            <button className="btn-secondary" style={{flex: 1, padding: '15px', maxWidth: '250px', background: 'transparent', border: '1px solid rgba(20,184,166,0.3)', color: '#2dd4bf', borderRadius: '30px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s ease'}} onClick={() => navigate('/jouer')}>Retour aux jeux</button>
           </div>
         </div>
       </div>

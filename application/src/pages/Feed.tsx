@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import type { Post } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
-import { getPosts } from '../services/postService'
+import { getPosts, getAllPostsAdmin } from '../services/postService'
 import { getLikedPostIds } from '../services/likeService'
 import { MasonryGrid } from '../components/masonry/MasonryGrid'
 import { PostCard } from '../components/cards/PostCard'
@@ -13,7 +13,7 @@ type PostWithProfile = Post & {
 }
 
 export default function Feed() {
-  const { user } = useAuth()
+  const { user, isAdmin } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const [posts, setPosts] = useState<PostWithProfile[]>([])
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set())
@@ -26,7 +26,7 @@ export default function Feed() {
       setLoading(true)
       try {
         const [postsData, likedData] = await Promise.all([
-          getPosts(),
+          isAdmin ? getAllPostsAdmin() : getPosts(),
           user ? getLikedPostIds(user.id) : Promise.resolve([]),
         ])
         setPosts(postsData as PostWithProfile[])
