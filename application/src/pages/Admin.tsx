@@ -8,7 +8,7 @@ import {
   getRoleRequests, approveRoleRequest, rejectRoleRequest,
   type UserRole, type RoleRequest,
 } from '../services/adminService'
-import { getPostReports } from '../services/reportService'
+import { getPostReports, deleteReport } from '../services/reportService'
 import './Admin.css'
 
 type PostWithProfile = Post & {
@@ -322,6 +322,7 @@ export default function Admin() {
                     <th>Signalé par</th>
                     <th>Raison</th>
                     <th>Date</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -340,6 +341,24 @@ export default function Admin() {
                       <td className="admin-report-reason">{r.reason}</td>
                       <td style={{ whiteSpace: 'nowrap', color: 'var(--text-muted)', fontSize: 13 }}>
                         {new Date(r.created_at).toLocaleDateString('fr-FR')}
+                      </td>
+                      <td>
+                        <div className="admin-actions">
+                          <button className="btn btn-danger" onClick={async () => {
+                            if (!confirm('Supprimer ce post définitivement ?')) return
+                            await deletePost(r.post_id)
+                            setReports(rs => rs.filter(rep => rep.id !== r.id))
+                            setPosts(ps => ps.filter(p => p.id !== r.post_id))
+                          }}>
+                            Supprimer le post
+                          </button>
+                          <button className="btn btn-outline" onClick={async () => {
+                            await deleteReport(r.id)
+                            setReports(rs => rs.filter(rep => rep.id !== r.id))
+                          }}>
+                            Ignorer
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

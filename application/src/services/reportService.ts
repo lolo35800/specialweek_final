@@ -22,6 +22,14 @@ export async function hasReportedPost(postId: string, userId: string): Promise<b
   return !!data
 }
 
+export async function deleteReport(reportId: string) {
+  const { error } = await supabase
+    .from('post_reports')
+    .delete()
+    .eq('id', reportId)
+  if (error) console.error('deleteReport error:', error)
+}
+
 export async function getPostReports() {
   const { data, error } = await supabase
     .from('post_reports')

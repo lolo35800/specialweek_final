@@ -125,7 +125,7 @@ export default function Navbar() {
                     </Link>
                     {isAdmin && (
                       <Link to="/admin" className="navbar-dropdown-item">
-                        ⚑ Signalements
+                        Admin
                       </Link>
                     )}
                     <Link to="/settings" className="navbar-dropdown-item">
