@@ -222,7 +222,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut()
   }
 
-  const isAdmin = profile?.role === 'admin' || user?.email === 'sebastien.ltrt@gmail.com'
+  const isAdmin = profile?.role === 'admin' || user?.email === import.meta.env.VITE_ADMIN_EMAIL
   const isBanned = profile?.is_banned === true && !isAdmin
 
   return (

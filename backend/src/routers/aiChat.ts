@@ -27,6 +27,13 @@ router.post('/chat', async (req, res) => {
 
   const { message, history = [] } = req.body as { message: string; history: ChatMessage[] }
 
+  if (typeof message !== 'string' || message.trim().length === 0 || message.length > 2000) {
+    return res.status(400).json({ detail: 'Message invalide' })
+  }
+  if (!Array.isArray(history) || history.length > MAX_HISTORY * 2) {
+    return res.status(400).json({ detail: 'Historique invalide' })
+  }
+
   const messages = [
     { role: 'system', content: SYSTEM_PROMPT },
     ...history.slice(-MAX_HISTORY),
@@ -55,8 +62,8 @@ router.post('/chat', async (req, res) => {
     clearTimeout(timeout)
 
     if (!resp.ok) {
-      const text = await resp.text()
-      return res.status(resp.status).json({ detail: `Erreur Groq : ${text}` })
+      console.error('Erreur Groq:', resp.status, await resp.text())
+      return res.status(502).json({ detail: "Le service IA est temporairement indisponible" })
     }
 
     const data = await resp.json()
@@ -67,7 +74,8 @@ router.post('/chat', async (req, res) => {
     if (err instanceof Error && err.name === 'AbortError') {
       return res.status(504).json({ detail: "L'API Groq n'a pas répondu à temps" })
     }
-    return res.status(502).json({ detail: `Erreur de connexion à Groq : ${err}` })
+    console.error('Erreur connexion Groq:', err)
+    return res.status(502).json({ detail: "Le service IA est temporairement indisponible" })
   }
 })
 
