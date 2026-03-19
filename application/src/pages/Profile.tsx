@@ -53,29 +53,23 @@ export default function Profile() {
 
   const load = async () => {
     if (!username) return
-    async function load() {
-      try {
-        const p = await getProfileByUsername(username!)
-        if (!p) { setLoading(false); return }
-        setProfile(p)
-        const userPosts = await getPostsByUser(p.id)
-        setPosts(userPosts as PostWithProfile[])
+    try {
+      const p = await getProfileByUsername(username!)
+      if (!p) { setLoading(false); return }
+      setProfile(p)
+      const userPosts = await getPostsByUser(p.id)
+      setPosts(userPosts as PostWithProfile[])
 
-        // Check community badges for the current user's own profile
-        if (currentUserProfile?.id === p.id) {
-          const likes = userPosts.reduce((acc: number, post: Post) => acc + post.likes_count, 0)
-          const plays = userPosts.reduce((acc: number, post: Post) => acc + post.plays_count, 0)
-          const earned = unlockCommunityBadges(p.id, userPosts.length, likes, plays)
-          if (earned.length > 0) setNewBadges(earned)
+      // Check community badges for the current user's own profile
+      if (currentUserProfile?.id === p.id) {
+        const likes = userPosts.reduce((acc: number, post: Post) => acc + post.likes_count, 0)
+        const plays = userPosts.reduce((acc: number, post: Post) => acc + post.plays_count, 0)
+        const earned = unlockCommunityBadges(p.id, userPosts.length, likes, plays)
+        if (earned.length > 0) setNewBadges(earned)
 
-          // Check pending role request
-          const req = await getUserRoleRequest(p.id)
-          if (req) setPendingRequest(req.requested_role)
-        }
-      } catch (e) {
-        console.error('Erreur chargement profil:', e)
-      } finally {
-        setLoading(false)
+        // Check pending role request
+        const req = await getUserRoleRequest(p.id)
+        if (req) setPendingRequest(req.requested_role)
       }
     } catch (e) {
       console.error('Erreur chargement profil:', e)
