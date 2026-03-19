@@ -53,8 +53,12 @@ export async function getRoleRequests(): Promise<RoleRequest[]> {
   const { data, error } = await supabase
     .from('role_requests')
     .select('*')
+    .eq('status', 'pending')
     .order('created_at', { ascending: false })
-  if (error) return []
+  if (error) {
+    console.error('getRoleRequests error:', error)
+    return []
+  }
   return (data ?? []) as RoleRequest[]
 }
 
@@ -83,17 +87,19 @@ export async function getUserRoleRequest(userId: string): Promise<RoleRequest | 
 }
 
 export async function approveRoleRequest(requestId: string, userId: string, role: UserRole) {
-  const { error: roleError } = await supabase
+  const r1 = await supabase
     .from('profiles')
     .update({ role })
     .eq('id', userId)
-  if (roleError) console.error('approveRoleRequest: updateUserRole failed', roleError)
+    .select()
+  console.log('approveRoleRequest: update profile →', r1.data, r1.error, r1.status)
 
-  const { error } = await supabase
+  const r2 = await supabase
     .from('role_requests')
     .update({ status: 'approved' })
     .eq('id', requestId)
-  if (error) console.error('approveRoleRequest: update status failed', error)
+    .select()
+  console.log('approveRoleRequest: update request →', r2.data, r2.error, r2.status)
 }
 
 export async function rejectRoleRequest(requestId: string) {
