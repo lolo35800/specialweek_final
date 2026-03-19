@@ -124,13 +124,18 @@ export default function FindInconsistencies() {
     }
   }
 
+  const maxScore = rounds.reduce(
+    (acc, r) => acc + r.segments.filter((s) => s.isInconsistency).length * 10,
+    0
+  )
+
   async function handleFinish() {
     setGameState('finished')
     const finalScore = totalScore + roundScore
     if (!scoreSent && profile?.username) {
       setScoreSent(true)
       try {
-        await submitScore('incoherences', profile.username, finalScore)
+        await submitScore({ module: 'incoherences', username: profile.username, score: finalScore, total: maxScore })
       } catch (e) {
         console.warn('Score non enregistré', e)
       }
@@ -148,10 +153,6 @@ export default function FindInconsistencies() {
 
   if (gameState === 'finished') {
     const finalScore = totalScore
-    const maxScore = rounds.reduce(
-      (acc, r) => acc + r.segments.filter((s) => s.isInconsistency).length * 10,
-      0
-    )
     return (
       <div className="fi-page">
         <div className="page-header">

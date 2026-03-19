@@ -1,4 +1,4 @@
-export type Module = 'quiz' | 'fake_or_real' | 'spot_zone'
+export type Module = 'quiz' | 'fake_or_real' | 'spot_zone' | 'incoherences'
 
 export interface Score {
   id: string
