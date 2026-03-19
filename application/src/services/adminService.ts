@@ -7,6 +7,7 @@ export type RoleRequest = {
   user_id: string
   username: string
   requested_role: UserRole
+  message: string | null
   status: 'pending' | 'approved' | 'rejected'
   created_at: string
 }
@@ -65,12 +66,14 @@ export async function getRoleRequests(): Promise<RoleRequest[]> {
 export async function submitRoleRequest(
   userId: string,
   username: string,
-  requestedRole: UserRole
+  requestedRole: UserRole,
+  message?: string
 ): Promise<{ error: string | null }> {
   const { error } = await supabase.from('role_requests').insert({
     user_id: userId,
     username,
     requested_role: requestedRole,
+    message: message?.trim() || null,
     status: 'pending',
   })
   return { error: error?.message ?? null }

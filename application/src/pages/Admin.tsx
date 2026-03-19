@@ -417,6 +417,11 @@ export default function Admin() {
                         🎓 {ROLE_LABELS[req.requested_role]}
                       </span>
                     </div>
+                    {req.message && (
+                      <p className="admin-report-reason" style={{ margin: 0 }}>
+                        💬 {req.message}
+                      </p>
+                    )}
                   </div>
                   <div className="admin-request-actions">
                     <button className="btn btn-primary" onClick={() => handleApprove(req)}>

@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import './FindInconsistencies.css'
 import { useAuth } from '../contexts/AuthContext'
 import { submitScore } from '../services/scoreService'
@@ -172,9 +173,12 @@ export default function FindInconsistencies() {
               ? '👍 Bon travail ! Quelques incohérences t\'ont échappé.'
               : '📚 Continue à t\'entraîner, la désinformation est subtile !'}
           </p>
-          <button className="btn-primary" onClick={handleRestart}>
-            Rejouer
-          </button>
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button className="btn-primary" onClick={handleRestart}>
+              Rejouer
+            </button>
+            <Link to="/jouer" className="btn btn-outline">Retour aux jeux</Link>
+          </div>
         </div>
         <div className="fi-tips">
           <h3>À retenir</h3>

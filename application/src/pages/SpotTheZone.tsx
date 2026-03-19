@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import './SpotTheZone.css'
 import { useAuth } from '../contexts/AuthContext'
 import { unlockSpotBadges, type Badge } from '../data/badges'
@@ -189,7 +190,10 @@ export default function SpotTheZone() {
               ? '👍 Bien joué ! Quelques artefacts t\'ont échappé.'
               : '📚 Continue à t\'entraîner — repérer l\'IA ça s\'apprend !'}
           </p>
-          <button className="stz-btn" onClick={handleRestart}>Rejouer</button>
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button className="stz-btn" onClick={handleRestart}>Rejouer</button>
+            <Link to="/jouer" className="btn btn-outline">Retour aux jeux</Link>
+          </div>
         </div>
         <div className="stz-tips">
           <h3>Les indices à toujours chercher</h3>

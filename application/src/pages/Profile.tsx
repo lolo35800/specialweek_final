@@ -45,6 +45,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(true)
   const [newBadges, setNewBadges] = useState<Badge[]>([])
   const [selectedRole, setSelectedRole] = useState<UserRole>('etudiant')
+  const [roleMessage, setRoleMessage] = useState('')
   const [roleRequestSent, setRoleRequestSent] = useState(false)
   const [pendingRequest, setPendingRequest] = useState<UserRole | null>(null)
   const [roleRequestLoading, setRoleRequestLoading] = useState(false)
@@ -95,7 +96,7 @@ export default function Profile() {
   async function handleRoleRequest() {
     if (!currentUserProfile) return
     setRoleRequestLoading(true)
-    await submitRoleRequest(currentUserProfile.id, currentUserProfile.username, selectedRole)
+    await submitRoleRequest(currentUserProfile.id, currentUserProfile.username, selectedRole, roleMessage)
     setPendingRequest(selectedRole)
     setRoleRequestSent(true)
     setRoleRequestLoading(false)
@@ -189,6 +190,14 @@ export default function Profile() {
                   </button>
                 ))}
               </div>
+              <textarea
+                className="profile-role-message"
+                placeholder="Explique pourquoi tu demandes ce rôle (optionnel)..."
+                value={roleMessage}
+                onChange={e => setRoleMessage(e.target.value)}
+                rows={3}
+                maxLength={500}
+              />
               <button
                 className="btn btn-primary"
                 onClick={handleRoleRequest}

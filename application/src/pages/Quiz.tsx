@@ -1,5 +1,6 @@
 import './Quiz.css'
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { submitScore } from '../services/scoreService'
 import { fallback as fallbackData } from '../data/fallback'
 import type { Question, QuizAnswer } from '../types/quiz'
@@ -177,7 +178,10 @@ export default function Quiz() {
         </div>
 
         <div className="quiz-results">
-          <button className="btn-primary" onClick={resetQuiz}>Rejouer</button>
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button className="btn-primary" onClick={resetQuiz}>Rejouer</button>
+            <Link to="/jouer" className="btn btn-outline">Retour aux jeux</Link>
+          </div>
 
           {score === questions.length && (
             <div className="certificate-banner">
