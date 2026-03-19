@@ -50,6 +50,7 @@ export default function Profile() {
   const [roleRequestSent, setRoleRequestSent] = useState(false)
   const [pendingRequest, setPendingRequest] = useState<UserRole | null>(null)
   const [roleRequestLoading, setRoleRequestLoading] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
   const load = async () => {
     if (!username) return
@@ -106,41 +107,19 @@ export default function Profile() {
   return (
     <div className="profile-page">
       <BadgeUnlockModal badges={newBadges} />
-      <div className="profile-hero">
-        <div className="profile-avatar-lg">
-          {profile.avatar_url
-            ? <img src={profile.avatar_url} alt="" />
-            : <span>{profile.username[0].toUpperCase()}</span>
+      <div className="profile-header-container">
+        <div className="profile-banner">
+          {profile.banner_url
+            ? <img src={profile.banner_url} alt="" />
+            : <div className="profile-banner-placeholder" />
           }
-        </div>
-        <div className="profile-info">
-          <h1>{profile.username}</h1>
-          <div className="profile-level">
-            <span className="level-badge">Niveau {Math.floor(Math.sqrt((profile.xp || 0) / 100)) + 1}</span>
-            <div className="xp-bar-container">
-              <div 
-                className="xp-bar-fill" 
-                style={{ width: `${((profile.xp || 0) % 100)}%` }} 
-              />
-              <span className="xp-text">{profile.xp || 0} XP</span>
-            </div>
-          </div>
-          {profile.bio && <p className="profile-bio">{profile.bio}</p>}
-          {hasSpecialRole && (
-            <span
-              className="profile-role-badge"
-              style={{ background: `${ROLE_COLORS[profile.role]}22`, color: ROLE_COLORS[profile.role], borderColor: `${ROLE_COLORS[profile.role]}55` }}
-            >
-              {profile.role === 'admin' ? '🛡️' : profile.role === 'etudiant' ? '🎒' : profile.role === 'expert_ia' ? '🤖' : '📚'}
-              {' '}{ROLE_LABELS[profile.role]}
-            </span>
-          )}
+          <div className="profile-banner-overlay" />
         </div>
 
         <div className="profile-hero">
-          {currentUserProfile?.id === profile.id && (
-            <button 
-              className="btn btn-outline profile-edit-btn" 
+          {isOwnProfile && (
+            <button
+              className="btn btn-outline profile-edit-btn"
               onClick={() => setIsEditModalOpen(true)}
             >
               Modifier le profil
@@ -158,15 +137,23 @@ export default function Profile() {
             <div className="profile-level">
               <span className="level-badge">Niveau {Math.floor(Math.sqrt((profile.xp || 0) / 100)) + 1}</span>
               <div className="xp-bar-container">
-                <div 
-                  className="xp-bar-fill" 
-                  style={{ width: `${((profile.xp || 0) % 100)}%` }} 
+                <div
+                  className="xp-bar-fill"
+                  style={{ width: `${((profile.xp || 0) % 100)}%` }}
                 />
                 <span className="xp-text">{profile.xp || 0} XP</span>
               </div>
             </div>
             {profile.bio && <p className="profile-bio">{profile.bio}</p>}
-            {profile.role === 'admin' && <span className="badge badge-admin">Admin</span>}
+            {hasSpecialRole && (
+              <span
+                className="profile-role-badge"
+                style={{ background: `${ROLE_COLORS[profile.role]}22`, color: ROLE_COLORS[profile.role], borderColor: `${ROLE_COLORS[profile.role]}55` }}
+              >
+                {profile.role === 'admin' ? '🛡️' : profile.role === 'etudiant' ? '🎒' : profile.role === 'expert_ia' ? '🤖' : '📚'}
+                {' '}{ROLE_LABELS[profile.role]}
+              </span>
+            )}
           </div>
           <div className="profile-stats">
             <div className="profile-stat">
@@ -256,6 +243,14 @@ export default function Profile() {
           </MasonryGrid>
         )}
       </div>
+
+      {isEditModalOpen && (
+        <EditProfileModal
+          profile={profile}
+          onClose={() => setIsEditModalOpen(false)}
+          onSuccess={() => { setIsEditModalOpen(false); load(); refreshProfile() }}
+        />
+      )}
     </div>
   )
 }
