@@ -226,8 +226,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const isAdmin = profile?.role === 'admin' || user?.email === import.meta.env.VITE_ADMIN_EMAIL
   const isBanned = profile?.is_banned === true && !isAdmin
 
+  async function refreshProfile() {
+    if (user) await fetchProfile(user.id, user.email ?? undefined)
+  }
+
   return (
-    <AuthContext.Provider value={{ user, session, profile, loading, signUp, signIn, signInWithGoogle, signOut, isAdmin }}>
+    <AuthContext.Provider value={{ user, session, profile, loading, signUp, signIn, signInWithGoogle, signOut, refreshProfile, isAdmin }}>
       {isBanned ? (
         <div style={{
           position: 'fixed', inset: 0,
