@@ -16,15 +16,21 @@ export default function ActusPage() {
   useEffect(() => {
     // 1. Fetch search data
     fetch(`${BASE_URL}/actus`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
+        return res.json()
+      })
       .then(data => {
-        if (data && data.length > 0) {
+        if (Array.isArray(data) && data.length > 0) {
           setActus(data)
+        } else {
+          console.warn("Backend returned empty actus, using fallback data.")
         }
-        setLoading(false)
       })
       .catch(err => {
-        console.error("Could not fetch actus:", err)
+        console.error("Could not fetch actus from backend, using fallback data:", err)
+      })
+      .finally(() => {
         setLoading(false)
       })
 
