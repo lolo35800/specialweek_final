@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import './ActusPage.css'
-import type { Actu } from '../data/actus'
+import { ACTUS, type Actu } from '../data/actus'
 import { BASE_URL } from '../services/api'
 
 export default function ActusPage() {
-  const [actus, setActus] = useState<Actu[]>([])
+  const [actus, setActus] = useState<Actu[]>(ACTUS)
   const [aiSummary, setAiSummary] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [loadingSummary, setLoadingSummary] = useState(true)

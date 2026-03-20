@@ -13,3 +13,9 @@
   position: relative; /* Ensure it stays above the canvas if needed, though canvas is z-index -1 */
   overflow: visible;
 }
+
+@media (max-width: 768px) {
+  .racing-bg-canvas {
+    display: none !important;
+  }
+}
