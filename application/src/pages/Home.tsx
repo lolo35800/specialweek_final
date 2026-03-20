@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ACTUS } from '../data/actus'
+import { ACTUS, type Actu } from '../data/actus'
 import { CLES } from '../data/cles'
 import { BASE_URL } from '../services/api'
 import './Home.css'
@@ -27,7 +27,8 @@ const JEUX = [
 ]
 
 export default function Home() {
-  const [actus, setActus] = useState(ACTUS)
+  const [actus, setActus] = useState<Actu[]>(ACTUS)
+  const [selectedActu, setSelectedActu] = useState<Actu | null>(null)
 
   useEffect(() => {
     fetch(`${BASE_URL}/actus`)
@@ -91,7 +92,11 @@ export default function Home() {
         {/* Cartes "à la une" — grandes, en haut */}
         <div className="home-actus-une">
           {une.map(actu => (
-            <Link key={actu.id} to={actu.lien} className="home-actu-card home-actu-card--une">
+            <div 
+              key={actu.id} 
+              className="home-actu-card home-actu-card--une clickable"
+              onClick={() => setSelectedActu(actu)}
+            >
               <div className="home-actu-top">
                 <span className="home-actu-cat">{actu.categorie}</span>
                 <span className="home-actu-une-badge">À la une</span>
@@ -102,17 +107,17 @@ export default function Home() {
                 <span className="home-actu-source">{actu.source}</span>
                 <span className="home-actu-date">{actu.date}</span>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
 
         {/* Autres actus — en dessous, tailles variées */}
         <div className="home-actus-autres">
           {autres.map((actu, i) => (
-            <Link
+            <div
               key={actu.id}
-              to={actu.lien}
-              className={`home-actu-card home-actu-card--other home-actu-card--s${(i % 3) + 1}`}
+              className={`home-actu-card home-actu-card--other home-actu-card--s${(i % 3) + 1} clickable`}
+              onClick={() => setSelectedActu(actu)}
             >
               <div className="home-actu-top">
                 <span className="home-actu-cat">{actu.categorie}</span>
@@ -123,7 +128,7 @@ export default function Home() {
                 <span className="home-actu-source">{actu.source}</span>
                 <span className="home-actu-date">{actu.date}</span>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </section>
@@ -179,6 +184,36 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Modal Détail Actu */}
+      {selectedActu && (
+        <div className="actu-modal-overlay" onClick={() => setSelectedActu(null)}>
+          <div className="actu-modal-content" onClick={e => e.stopPropagation()}>
+            <button className="actu-modal-close" onClick={() => setSelectedActu(null)}>×</button>
+            <div className="actu-modal-header">
+              <span className="actus-card-cat">{selectedActu.categorie}</span>
+              <span className="actu-modal-date">{selectedActu.date}</span>
+            </div>
+            <h2 className="actu-modal-title">{selectedActu.titre}</h2>
+            <div className="actu-modal-body">
+              <p className="actu-modal-resume">{selectedActu.resume}</p>
+              <div className="actu-modal-info">
+                <span>Source : <strong>{selectedActu.source}</strong></span>
+              </div>
+            </div>
+            <div className="actu-modal-footer">
+              <a 
+                href={selectedActu.lien} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn btn-primary"
+                onClick={() => setSelectedActu(null)}
+              >
+                Lire l'article complet sur {selectedActu.source}
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
