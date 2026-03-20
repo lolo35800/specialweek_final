@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { getChallengeById, getUserParticipation, submitChallengeResult } from '../services/challengeService'
-import type { Challenge, ChallengeParticipation } from '../lib/supabase'
+import type { Challenge } from '../lib/supabase'
 import type { Question, QuizAnswer } from '../types/quiz'
 import { fallback as fallbackData } from '../data/fallback'
 import './Quiz.css'
@@ -29,11 +29,9 @@ const INITIAL_TIMER = 30
 
 export default function ChallengePlay() {
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
   const { profile } = useAuth()
 
   const [challenge, setChallenge] = useState<Challenge | null>(null)
-  const [participation, setParticipation] = useState<ChallengeParticipation | null>(null)
   const [pageLoading, setPageLoading] = useState(true)
   const [pageError, setPageError] = useState<string | null>(null)
 
@@ -74,7 +72,6 @@ export default function ChallengePlay() {
       const part = await getUserParticipation(id, profile.id)
       if (!part) { setPageError('Tu n\'as pas rejoint ce challenge.'); setPageLoading(false); return }
       if (part.completed_at) { setPageError('Tu as déjà terminé ce challenge.'); setPageLoading(false); return }
-      setParticipation(part)
 
       // Load quiz questions if quiz type
       if (ch.type === 'quiz') {
