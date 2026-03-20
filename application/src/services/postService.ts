@@ -110,4 +110,16 @@ export async function recordPlay(
   })
   // Incrémenter plays_count
   await supabase.rpc('increment_plays', { post_id: postId })
+
+  // Add XP and increment games_played for the user
+  if (userId) {
+    const { data: profile } = await supabase.from('profiles').select('xp, games_played').eq('id', userId).single()
+    if (profile) {
+      const xpGained = total * 20 // 20 XP per question
+      await supabase.from('profiles').update({
+        xp: (profile.xp || 0) + xpGained,
+        games_played: (profile.games_played || 0) + 1
+      }).eq('id', userId)
+    }
+  }
 }

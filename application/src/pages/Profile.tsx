@@ -155,19 +155,9 @@ export default function Profile() {
               </span>
             )}
           </div>
-          <div className="profile-stats">
-            <div className="profile-stat">
-              <span className="profile-stat-value">{posts.length}</span>
-              <span className="profile-stat-label">Défis créés</span>
-            </div>
-            <div className="profile-stat">
-              <span className="profile-stat-value">{profile.games_played || 0}</span>
-              <span className="profile-stat-label">Participations</span>
-            </div>
-            <div className="profile-stat">
-              <span className="profile-stat-value">{totalPlays}</span>
-              <span className="profile-stat-label">Vues reçues</span>
-            </div>
+          <div className="profile-stat">
+            <span className="profile-stat-value">{totalPlays}</span>
+            <span className="profile-stat-label">Vues reçues</span>
           </div>
         </div>
       </div>

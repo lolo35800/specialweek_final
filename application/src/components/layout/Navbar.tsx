@@ -58,6 +58,7 @@ export default function Navbar() {
 
           <div className={`navbar-links ${isMenuOpen ? 'active' : ''}`}>
             <NavLink to="/jouer" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Jouer</NavLink>
+            <NavLink to="/detector" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Détecteur IA</NavLink>
             <NavLink to="/leaderboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Classement</NavLink>
             <NavLink to="/feed" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Communauté</NavLink>
             <NavLink to="/comprendre" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Apprendre</NavLink>

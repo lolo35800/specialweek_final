@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './ActusPage.css'
 import type { Actu } from '../data/actus'
+import { BASE_URL } from '../services/api'
 
 export default function ActusPage() {
   const [actus, setActus] = useState<Actu[]>([])
@@ -14,7 +15,7 @@ export default function ActusPage() {
 
   useEffect(() => {
     // 1. Fetch search data
-    fetch('http://localhost:8000/actus')
+    fetch(`${BASE_URL}/actus`)
       .then(res => res.json())
       .then(data => {
         if (data && data.length > 0) {
@@ -28,7 +29,7 @@ export default function ActusPage() {
       })
 
     // 2. Fetch AI summary
-    fetch('http://localhost:8000/actus-summary')
+    fetch(`${BASE_URL}/actus-summary`)
       .then(res => res.json())
       .then(data => {
         if (data.summary) setAiSummary(data.summary)

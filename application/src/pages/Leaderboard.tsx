@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import type { Profile } from '../lib/supabase'
 import './Leaderboard.css'
@@ -18,30 +19,41 @@ const CATEGORY_ICONS: Record<RankingCategory, string> = {
 }
 
 export default function Leaderboard() {
+  const navigate = useNavigate()
   const [profiles, setProfiles] = useState<Profile[]>([])
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState<RankingCategory>('xp')
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
-    async function load() {
-      setLoading(true)
-      try {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .order(activeCategory, { ascending: false })
-          .limit(20)
+    const timer = setTimeout(() => {
+      async function load() {
+        setLoading(true)
+        try {
+          let query = supabase
+            .from('profiles')
+            .select('*')
+            .order(activeCategory, { ascending: false })
 
-        if (error) throw error
-        setProfiles(data || [])
-      } catch (err) {
-        console.error('Erreur chargement classement:', err)
-      } finally {
-        setLoading(false)
+          if (searchQuery.trim()) {
+            query = query.ilike('username', `%${searchQuery.trim()}%`)
+          }
+
+          const { data, error } = await query.limit(50)
+
+          if (error) throw error
+          setProfiles(data || [])
+        } catch (err) {
+          console.error('Erreur chargement classement:', err)
+        } finally {
+          setLoading(false)
+        }
       }
-    }
-    load()
-  }, [activeCategory])
+      load()
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [activeCategory, searchQuery])
 
   function getLevel(xp: number) {
     return Math.floor(Math.sqrt(xp / 100)) + 1
@@ -56,17 +68,29 @@ export default function Leaderboard() {
       </div>
 
       <div className="leaderboard-container">
-        <div className="leaderboard-tabs">
-          {(Object.keys(CATEGORY_LABELS) as RankingCategory[]).map((id) => (
-            <button
-              key={id}
-              className={`tab-btn ${activeCategory === id ? 'active' : ''}`}
-              onClick={() => setActiveCategory(id)}
-            >
-              <span className="tab-icon">{CATEGORY_ICONS[id]}</span>
-              {CATEGORY_LABELS[id]}
-            </button>
-          ))}
+        <div className="leaderboard-toolbar">
+          <div className="leaderboard-tabs">
+            {(Object.keys(CATEGORY_LABELS) as RankingCategory[]).map((id) => (
+              <button
+                key={id}
+                className={`tab-btn ${activeCategory === id ? 'active' : ''}`}
+                onClick={() => setActiveCategory(id)}
+              >
+                <span className="tab-icon">{CATEGORY_ICONS[id]}</span>
+                {CATEGORY_LABELS[id]}
+              </button>
+            ))}
+          </div>
+          <div className="leaderboard-search">
+            <span className="search-icon">🔍</span>
+            <input 
+              type="text" 
+              className="search-input" 
+              placeholder="Rechercher un pseudo..." 
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+            />
+          </div>
         </div>
 
         {loading ? (
@@ -82,7 +106,11 @@ export default function Leaderboard() {
         ) : (
           <div className="leaderboard-list">
             {profiles.map((profile, index) => (
-              <div key={profile.id} className={`leaderboard-item rank-${index + 1}`}>
+              <div 
+                key={profile.id} 
+                className={`leaderboard-item rank-${index + 1} clickable`}
+                onClick={() => navigate(`/profile/${profile.username}`)}
+              >
                 <div className="rank-badge">
                   {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}
                 </div>

@@ -10,6 +10,7 @@ import CleDetail from './pages/CleDetail'
 import Jouer from './pages/Jouer'
 import Quiz from './pages/Quiz'
 import FakeOrReal from './pages/FakeOrReal'
+import Detector from './pages/Detector'
 import SpotTheZone from './pages/SpotTheZone'
 import FindInconsistencies from './pages/FindInconsistencies'
 import ReglesAntiDesinfo from './pages/ReglesAntiDesinfo'
@@ -44,6 +45,7 @@ export default function App() {
             <Route path="jouer" element={<Jouer />} />
             <Route path="jouer/quiz" element={<Quiz />} />
             <Route path="jouer/fake-ou-reel" element={<FakeOrReal />} />
+            <Route path="detector" element={<Detector />} />
             <Route path="jouer/spot-the-zone" element={<SpotTheZone />} />
             <Route path="jouer/incoherences" element={<FindInconsistencies />} />
             <Route path="regles" element={<ReglesAntiDesinfo />} />
