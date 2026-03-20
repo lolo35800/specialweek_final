@@ -1,5 +1,4 @@
 .profile-page {
-  min-height: 100vh;
   animation: fadeInUp 0.5s var(--ease-out);
 }
 
@@ -50,16 +49,15 @@
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  padding: 0 24px 32px;
+  padding: 32px 24px;
   text-align: center;
-  margin-top: -60px; /* Pull up over the banner */
   position: relative;
   z-index: 10;
 }
 
 .profile-edit-btn {
   position: absolute;
-  top: -40px;
+  top: 16px;
   right: 24px;
   z-index: 20;
   backdrop-filter: blur(12px);
