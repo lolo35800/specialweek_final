@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import type { Profile as ProfileType, Post } from '../lib/supabase'
+import type { Profile as ProfileType, Post, Challenge } from '../lib/supabase'
 import { getProfileByUsername, updateProfile } from '../services/profileService'
 import { getPostsByUser } from '../services/postService'
+import { getChallengesByCreator } from '../services/challengeService'
 import { uploadImage } from '../services/storageService'
 import { PostCard } from '../components/cards/PostCard'
 import { MasonryGrid } from '../components/masonry/MasonryGrid'
 import { BadgeGrid } from '../components/badges/BadgeGrid'
 import { BadgeUnlockModal } from '../components/badges/BadgeUnlockModal'
+import { CreateChallengeModal } from '../components/challenge/CreateChallengeModal'
+import { JoinChallengeInput } from '../components/challenge/JoinChallengeInput'
+import { ChallengeCard } from '../components/challenge/ChallengeCard'
 import { unlockCommunityBadges, type Badge } from '../data/badges'
 import { useAuth } from '../contexts/AuthContext'
 import { submitRoleRequest, getUserRoleRequest, type UserRole } from '../services/adminService'
@@ -51,6 +55,9 @@ export default function Profile() {
   const [pendingRequest, setPendingRequest] = useState<UserRole | null>(null)
   const [roleRequestLoading, setRoleRequestLoading] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isCreateChallengeOpen, setIsCreateChallengeOpen] = useState(false)
+  const [challenges, setChallenges] = useState<Challenge[]>([])
+  const [activeTab, setActiveTab] = useState<'posts' | 'challenges'>('posts')
 
   const load = async () => {
     if (!username) return
@@ -71,6 +78,12 @@ export default function Profile() {
         // Check pending role request
         const req = await getUserRoleRequest(p.id)
         if (req) setPendingRequest(req.requested_role)
+      }
+
+      // Load challenges if professor
+      if (p.role === 'professeur') {
+        const ch = await getChallengesByCreator(p.id)
+        setChallenges(ch)
       }
     } catch (e) {
       console.error('Erreur chargement profil:', e)
@@ -221,24 +234,96 @@ export default function Profile() {
         </div>
       )}
 
-      <div className="profile-posts">
-        <h2>Posts ({posts.length})</h2>
-        {posts.length === 0 ? (
-          <p className="profile-empty">Aucun post publié pour l'instant.</p>
-        ) : (
-          <MasonryGrid columns={3}>
-            {posts.map(post => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </MasonryGrid>
-        )}
-      </div>
+      {/* Tabs for professors and students */}
+      {isOwnProfile && (profile.role === 'professeur' || profile.role === 'etudiant') && (
+        <div className="profile-tabs">
+          <button
+            className={`profile-tab ${activeTab === 'posts' ? 'active' : ''}`}
+            onClick={() => setActiveTab('posts')}
+          >
+            Posts
+          </button>
+          {profile.role === 'professeur' && (
+            <button
+              className={`profile-tab ${activeTab === 'challenges' ? 'active' : ''}`}
+              onClick={() => setActiveTab('challenges')}
+            >
+              Mes Challenges
+            </button>
+          )}
+          {profile.role === 'etudiant' && (
+            <button
+              className={`profile-tab ${activeTab === 'challenges' ? 'active' : ''}`}
+              onClick={() => setActiveTab('challenges')}
+            >
+              Rejoindre un challenge
+            </button>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'posts' && (
+        <div className="profile-posts">
+          <h2>Posts ({posts.length})</h2>
+          {posts.length === 0 ? (
+            <p className="profile-empty">Aucun post publié pour l'instant.</p>
+          ) : (
+            <MasonryGrid columns={3}>
+              {posts.map(post => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </MasonryGrid>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'challenges' && isOwnProfile && profile.role === 'professeur' && (
+        <div className="profile-challenges">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <h2>Mes Challenges ({challenges.length})</h2>
+            <button className="btn btn-primary" onClick={() => setIsCreateChallengeOpen(true)}>
+              + Créer un challenge
+            </button>
+          </div>
+          {challenges.length === 0 ? (
+            <p className="profile-empty">Aucun challenge créé pour l'instant.</p>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {challenges.map(ch => (
+                <ChallengeCard key={ch.id} challenge={ch} showResults />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'challenges' && isOwnProfile && profile.role === 'etudiant' && (
+        <div className="profile-challenges">
+          <h2 style={{ marginBottom: '1.5rem' }}>Rejoindre un challenge</h2>
+          <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
+            Entre le code à 6 caractères donné par ton professeur pour accéder au challenge.
+          </p>
+          <JoinChallengeInput userId={profile.id} />
+        </div>
+      )}
+
 
       {isEditModalOpen && (
         <EditProfileModal
           profile={profile}
           onClose={() => setIsEditModalOpen(false)}
           onSuccess={() => { setIsEditModalOpen(false); load(); refreshProfile() }}
+        />
+      )}
+
+      {isCreateChallengeOpen && (
+        <CreateChallengeModal
+          creatorId={profile.id}
+          onClose={() => setIsCreateChallengeOpen(false)}
+          onCreated={async () => {
+            const ch = await getChallengesByCreator(profile.id)
+            setChallenges(ch)
+          }}
         />
       )}
     </div>

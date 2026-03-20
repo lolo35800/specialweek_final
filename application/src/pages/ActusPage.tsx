@@ -1,21 +1,20 @@
 import { useState, useEffect } from 'react'
 import './ActusPage.css'
-import type { Actu } from '../data/actus'
-import { BASE_URL } from '../services/api'
+import { ACTUS, type Actu } from '../data/actus'
 
 export default function ActusPage() {
-  const [actus, setActus] = useState<Actu[]>([])
+  const [actus, setActus] = useState<Actu[]>(ACTUS)
   const [aiSummary, setAiSummary] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [loadingSummary, setLoadingSummary] = useState(true)
-  
+
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('Toutes')
   const [sortOrder, setSortOrder] = useState('recent')
 
   useEffect(() => {
-    // 1. Fetch search data
-    fetch(`${BASE_URL}/actus`)
+    // 1. Fetch actus from API
+    fetch('/actus')
       .then(res => res.json())
       .then(data => {
         if (data && data.length > 0) {
@@ -29,7 +28,7 @@ export default function ActusPage() {
       })
 
     // 2. Fetch AI summary
-    fetch(`${BASE_URL}/actus-summary`)
+    fetch('/actus-summary')
       .then(res => res.json())
       .then(data => {
         if (data.summary) setAiSummary(data.summary)

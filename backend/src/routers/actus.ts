@@ -108,6 +108,9 @@ router.get('/actus', async (_req, res) => {
     actus.sort((a: { timestamp: number }, b: { timestamp: number }) => b.timestamp - a.timestamp)
     if (actus.length > 0) actus[0].une = true
 
+    // Save to cache
+    cache = { data: actus, timestamp: Date.now() }
+
     res.json(actus)
   } catch (err) {
     console.error('Erreur fetch actus RSS:', err)
