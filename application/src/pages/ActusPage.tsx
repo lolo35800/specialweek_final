@@ -12,6 +12,8 @@ export default function ActusPage() {
   const [categoryFilter, setCategoryFilter] = useState('Toutes')
   const [sortOrder, setSortOrder] = useState('recent')
 
+  const [selectedActu, setSelectedActu] = useState<Actu | null>(null)
+
   useEffect(() => {
     // 1. Fetch actus from API
     fetch('/actus')
@@ -134,7 +136,11 @@ export default function ActusPage() {
         ) : (
           <div className="actus-grid">
             {sortedActus.map(actu => (
-              <a key={actu.id} href={actu.lien} target="_blank" rel="noopener noreferrer" className="actus-card">
+              <div 
+                key={actu.id} 
+                className="actus-card clickable"
+                onClick={() => setSelectedActu(actu)}
+              >
                 <div className="actus-card-top">
                   <span className="actus-card-cat">{actu.categorie}</span>
                 </div>
@@ -144,11 +150,42 @@ export default function ActusPage() {
                   <span className="actus-card-source">{actu.source}</span>
                   <span className="actus-card-date">{actu.date}</span>
                 </div>
-              </a>
+              </div>
             ))}
           </div>
         )}
       </section>
+
+      {/* Modal Détail Actu */}
+      {selectedActu && (
+        <div className="actu-modal-overlay" onClick={() => setSelectedActu(null)}>
+          <div className="actu-modal-content" onClick={e => e.stopPropagation()}>
+            <button className="actu-modal-close" onClick={() => setSelectedActu(null)}>×</button>
+            <div className="actu-modal-header">
+              <span className="actus-card-cat">{selectedActu.categorie}</span>
+              <span className="actu-modal-date">{selectedActu.date}</span>
+            </div>
+            <h2 className="actu-modal-title">{selectedActu.titre}</h2>
+            <div className="actu-modal-body">
+              <p className="actu-modal-resume">{selectedActu.resume}</p>
+              <div className="actu-modal-info">
+                <span>Source : <strong>{selectedActu.source}</strong></span>
+              </div>
+            </div>
+            <div className="actu-modal-footer">
+              <a 
+                href={selectedActu.lien} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn btn-primary"
+                onClick={() => setSelectedActu(null)}
+              >
+                Lire l'article complet sur {selectedActu.source}
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
