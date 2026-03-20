@@ -19,8 +19,15 @@ const games = [
   {
     to: '/jouer/spot-the-zone',
     emoji: '🔍',
-    title: 'Trouve les incohérences',
+    title: 'Spot the Zone',
     description: 'Clique sur les zones suspectes d\'une image pour révéler les indices.',
+    badge: null,
+  },
+  {
+    to: '/jouer/incoherences',
+    emoji: '🧐',
+    title: 'Trouve les incohérences',
+    description: 'Lis un texte et clique sur les passages suspects. Sauras-tu repérer la désinformation ?',
     badge: 'Nouveau',
   },
 ]

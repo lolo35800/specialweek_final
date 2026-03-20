@@ -1,11 +1,13 @@
 import './Quiz.css'
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { submitScore } from '../services/scoreService'
 import { fallback as fallbackData } from '../data/fallback'
 import type { Question, QuizAnswer } from '../types/quiz'
 import { useAuth } from '../contexts/AuthContext'
 import { unlockQuizBadges, type Badge } from '../data/badges'
 import { BadgeUnlockModal } from '../components/badges/BadgeUnlockModal'
+import { generateCertificate } from '../lib/generateCertificate'
 
 const INITIAL_TIMER = 30
 
@@ -188,7 +190,28 @@ export default function Quiz() {
         </div>
 
         <div className="quiz-results">
-          <button className="btn-primary" onClick={resetQuiz}>Rejouer</button>
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button className="btn-primary" onClick={resetQuiz}>Rejouer</button>
+            <Link to="/jouer" className="btn btn-outline">Retour aux jeux</Link>
+          </div>
+
+          {score === questions.length && (
+            <div className="certificate-banner">
+              <div className="certificate-banner-text">
+                <span className="certificate-trophy">🏆</span>
+                <div>
+                  <strong>Score parfait !</strong>
+                  <p>Tu peux télécharger ton certificat anti-désinformation.</p>
+                </div>
+              </div>
+              <button
+                className="btn-certificate"
+                onClick={() => generateCertificate(username)}
+              >
+                Télécharger le certificat (PDF)
+              </button>
+            </div>
+          )}
 
           {answers.map((answer, idx) => {
             const q = questions[idx]
