@@ -57,64 +57,83 @@ function formatDateFr(dateStr: string): { display: string; ts: number } {
   }
 }
 
+async function fetchActusFromRSS(): Promise<unknown[]> {
+  const resp = await fetch(RSS_URL, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+      'Accept-Language': 'fr-FR,fr;q=0.9',
+    },
+  })
+
+  if (!resp.ok) throw new Error(`RSS fetch failed: HTTP ${resp.status}`)
+
+  const xml = await resp.text()
+
+  // Detect if Google returned HTML instead of XML (IP blocked)
+  if (xml.trimStart().startsWith('<html') || xml.trimStart().startsWith('<!DOCTYPE')) {
+    throw new Error('Google News returned HTML instead of RSS — IP likely blocked')
+  }
+
+  const parsed = await parseStringPromise(xml)
+  const items = parsed?.rss?.channel?.[0]?.item ?? []
+
+  if (items.length === 0) throw new Error('RSS feed returned 0 items')
+
+  const actus = items.slice(0, 50).map((item: Record<string, string[]>, idx: number) => {
+    const rawTitle = item.title?.[0] ?? ''
+    const link = item.link?.[0] ?? ''
+    const rawDesc = item.description?.[0] ?? ''
+    const pubDate = item.pubDate?.[0] ?? ''
+
+    const dashIdx = rawTitle.lastIndexOf(' - ')
+    const titre = dashIdx > 0 ? rawTitle.slice(0, dashIdx) : rawTitle
+    const source = dashIdx > 0 ? rawTitle.slice(dashIdx + 3) : ''
+
+    let resume = stripHtml(rawDesc).trim()
+    if (!resume) resume = "Découvrez la dernière actualité sur l'intelligence artificielle."
+    if (resume.length > 150) resume = resume.slice(0, 147) + '...'
+
+    const { display: date, ts: timestamp } = formatDateFr(pubDate)
+    const categorie = categorize(`${titre} ${resume}`)
+
+    return {
+      id: `rss-${idx}-${timestamp}`,
+      date,
+      timestamp,
+      categorie,
+      titre,
+      resume,
+      source,
+      lien: link,
+      une: false,
+    }
+  })
+
+  actus.sort((a: { timestamp: number }, b: { timestamp: number }) => b.timestamp - a.timestamp)
+  if (actus.length > 0) actus[0].une = true
+
+  return actus
+}
+
 router.get('/actus', async (_req, res) => {
-  // Return cache if fresh
+  // Return fresh cache
   if (cache.data && Date.now() - cache.timestamp < CACHE_TTL) {
     return res.json(cache.data)
   }
 
   try {
-    const resp = await fetch(RSS_URL, {
-      headers: { 'User-Agent': 'Mozilla/5.0' },
-    })
-    const xml = await resp.text()
-    const parsed = await parseStringPromise(xml)
-
-    const items = parsed?.rss?.channel?.[0]?.item ?? []
-    const actus = items.slice(0, 50).map((item: Record<string, string[]>, idx: number) => {
-      const rawTitle = item.title?.[0] ?? ''
-      const link = item.link?.[0] ?? ''
-      const rawDesc = item.description?.[0] ?? ''
-      const pubDate = item.pubDate?.[0] ?? ''
-
-      // Extract source from title ("Title - Source")
-      const dashIdx = rawTitle.lastIndexOf(' - ')
-      const titre = dashIdx > 0 ? rawTitle.slice(0, dashIdx) : rawTitle
-      const source = dashIdx > 0 ? rawTitle.slice(dashIdx + 3) : ''
-
-      // Clean description
-      let resume = stripHtml(rawDesc).trim()
-      if (!resume) resume = "Découvrez la dernière actualité sur l'intelligence artificielle."
-      if (resume.length > 150) resume = resume.slice(0, 147) + '...'
-
-      const { display: date, ts: timestamp } = formatDateFr(pubDate)
-      const combined = `${titre} ${resume}`
-      const categorie = categorize(combined)
-
-      return {
-        id: `rss-${idx}-${timestamp}`,
-        date,
-        timestamp,
-        categorie,
-        titre,
-        resume,
-        source,
-        lien: link,
-        une: false,
-      }
-    })
-
-    // Sort newest first, mark first as featured
-    actus.sort((a: { timestamp: number }, b: { timestamp: number }) => b.timestamp - a.timestamp)
-    if (actus.length > 0) actus[0].une = true
-
-    // Save to cache
+    const actus = await fetchActusFromRSS()
     cache = { data: actus, timestamp: Date.now() }
-
-    res.json(actus)
+    return res.json(actus)
   } catch (err) {
-    console.error('Erreur fetch actus RSS:', err)
-    res.json([])
+    console.error('[actus] RSS fetch error:', (err as Error).message)
+    // Serve stale cache rather than empty array
+    if (cache.data) {
+      console.warn('[actus] Serving stale cache')
+      return res.json(cache.data)
+    }
+    return res.json([])
   }
 })
 
