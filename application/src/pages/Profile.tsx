@@ -55,7 +55,7 @@ export default function Profile() {
   const load = async () => {
     if (!username) return
     try {
-      const p = await getProfileByUsername(username)
+      const p = await getProfileByUsername(username!)
       if (!p) { setLoading(false); return }
       setProfile(p)
       const userPosts = await getPostsByUser(p.id)
@@ -107,52 +107,53 @@ export default function Profile() {
   return (
     <div className="profile-page">
       <BadgeUnlockModal badges={newBadges} />
-      <div className="profile-hero">
-        {currentUserProfile?.id === profile.id && (
-          <button 
-            className="btn btn-outline profile-edit-btn" 
-            onClick={() => setIsEditModalOpen(true)}
-          >
-            Modifier le profil
-          </button>
-        )}
-        <div className="profile-avatar-lg">
-          {profile.avatar_url
-            ? <img src={profile.avatar_url} alt="" />
-            : <span>{profile.username[0].toUpperCase()}</span>
+      <div className="profile-header-container">
+        <div className="profile-banner">
+          {profile.banner_url
+            ? <img src={profile.banner_url} alt="" />
+            : <div className="profile-banner-placeholder" />
           }
+          <div className="profile-banner-overlay" />
         </div>
-        <div className="profile-info">
-          <h1>{profile.username}</h1>
-          <div className="profile-level">
-            <span className="level-badge">Niveau {Math.floor(Math.sqrt((profile.xp || 0) / 100)) + 1}</span>
-            <div className="xp-bar-container">
-              <div 
-                className="xp-bar-fill" 
-                style={{ width: `${((profile.xp || 0) % 100)}%` }} 
-              />
-              <span className="xp-text">{profile.xp || 0} XP</span>
-            </div>
-          </div>
-          {profile.bio && <p className="profile-bio">{profile.bio}</p>}
-          {hasSpecialRole && (
-            <span
-              className="profile-role-badge"
-              style={{ background: `${ROLE_COLORS[profile.role]}22`, color: ROLE_COLORS[profile.role], borderColor: `${ROLE_COLORS[profile.role]}55` }}
+
+        <div className="profile-hero">
+          {isOwnProfile && (
+            <button
+              className="btn btn-outline profile-edit-btn"
+              onClick={() => setIsEditModalOpen(true)}
             >
-              {profile.role === 'admin' ? '🛡️' : profile.role === 'etudiant' ? '🎒' : profile.role === 'expert_ia' ? '🤖' : '📚'}
-              {' '}{ROLE_LABELS[profile.role]}
-            </span>
+              Modifier le profil
+            </button>
           )}
-        </div>
-        <div className="profile-stats">
-          <div className="profile-stat">
-            <span className="profile-stat-value">{posts.length}</span>
-            <span className="profile-stat-label">Défis créés</span>
+
+          <div className="profile-avatar-lg">
+            {profile.avatar_url
+              ? <img src={profile.avatar_url} alt="" />
+              : <span>{profile.username[0].toUpperCase()}</span>
+            }
           </div>
-          <div className="profile-stat">
-            <span className="profile-stat-value">{profile.games_played || 0}</span>
-            <span className="profile-stat-label">Participations</span>
+          <div className="profile-info">
+            <h1>{profile.username}</h1>
+            <div className="profile-level">
+              <span className="level-badge">Niveau {Math.floor(Math.sqrt((profile.xp || 0) / 100)) + 1}</span>
+              <div className="xp-bar-container">
+                <div
+                  className="xp-bar-fill"
+                  style={{ width: `${((profile.xp || 0) % 100)}%` }}
+                />
+                <span className="xp-text">{profile.xp || 0} XP</span>
+              </div>
+            </div>
+            {profile.bio && <p className="profile-bio">{profile.bio}</p>}
+            {hasSpecialRole && (
+              <span
+                className="profile-role-badge"
+                style={{ background: `${ROLE_COLORS[profile.role]}22`, color: ROLE_COLORS[profile.role], borderColor: `${ROLE_COLORS[profile.role]}55` }}
+              >
+                {profile.role === 'admin' ? '🛡️' : profile.role === 'etudiant' ? '🎒' : profile.role === 'expert_ia' ? '🤖' : '📚'}
+                {' '}{ROLE_LABELS[profile.role]}
+              </span>
+            )}
           </div>
           <div className="profile-stat">
             <span className="profile-stat-value">{totalPlays}</span>
@@ -234,14 +235,10 @@ export default function Profile() {
       </div>
 
       {isEditModalOpen && (
-        <EditProfileModal 
-          profile={profile} 
-          onClose={() => setIsEditModalOpen(false)} 
-          onSuccess={() => {
-            setIsEditModalOpen(false)
-            load()
-            refreshProfile?.()
-          }} 
+        <EditProfileModal
+          profile={profile}
+          onClose={() => setIsEditModalOpen(false)}
+          onSuccess={() => { setIsEditModalOpen(false); load(); refreshProfile() }}
         />
       )}
     </div>
