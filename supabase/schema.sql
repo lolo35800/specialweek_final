@@ -89,7 +89,36 @@ CREATE TABLE play_sessions (
 );
 
 
--- ── 5. FONCTIONS RPC (likes / plays counters) ────
+-- ── 5. CHALLENGES ──────────────────────────────────
+
+CREATE TABLE challenges (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  creator_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  title text NOT NULL,
+  type text NOT NULL CHECK (type IN ('quiz', 'fake_or_real')),
+  join_code text UNIQUE NOT NULL,
+  config jsonb NOT NULL DEFAULT '{}',
+  status text NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'closed')),
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+
+-- ── 6. CHALLENGE PARTICIPATIONS ────────────────────
+
+CREATE TABLE challenge_participations (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  challenge_id uuid NOT NULL REFERENCES challenges(id) ON DELETE CASCADE,
+  user_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  score int,
+  total int,
+  duration_s int,
+  completed_at timestamptz,
+  joined_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (challenge_id, user_id)
+);
+
+
+-- ── 7. FONCTIONS RPC (likes / plays counters) ────
 
 CREATE OR REPLACE FUNCTION increment_likes(post_id uuid)
 RETURNS void AS $$
@@ -107,7 +136,7 @@ RETURNS void AS $$
 $$ LANGUAGE sql SECURITY DEFINER;
 
 
--- ── 6. ROW LEVEL SECURITY ────────────────────────
+-- ── 8. ROW LEVEL SECURITY ────────────────────────
 
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
@@ -147,4 +176,36 @@ CREATE POLICY "likes_delete_own"    ON likes FOR DELETE USING (auth.uid() = user
 -- play_sessions
 CREATE POLICY "play_sessions_insert_any" ON play_sessions FOR INSERT WITH CHECK (true);
 CREATE POLICY "play_sessions_select_own" ON play_sessions FOR SELECT
+  USING (auth.uid() = user_id);
+
+-- challenges
+ALTER TABLE challenges ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "challenges_select_auth" ON challenges FOR SELECT
+  USING (auth.uid() IS NOT NULL);
+
+CREATE POLICY "challenges_insert_prof" ON challenges FOR INSERT
+  WITH CHECK (
+    auth.uid() = creator_id
+    AND EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'professeur')
+  );
+
+CREATE POLICY "challenges_update_own" ON challenges FOR UPDATE
+  USING (auth.uid() = creator_id);
+
+-- challenge_participations
+ALTER TABLE challenge_participations ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "cp_select_own_or_creator" ON challenge_participations FOR SELECT
+  USING (
+    auth.uid() = user_id
+    OR EXISTS (
+      SELECT 1 FROM challenges WHERE challenges.id = challenge_id AND challenges.creator_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "cp_insert_auth" ON challenge_participations FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "cp_update_own" ON challenge_participations FOR UPDATE
   USING (auth.uid() = user_id);

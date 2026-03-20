@@ -4,7 +4,6 @@ import { useAuth } from '../contexts/AuthContext'
 import { submitScore as submitGameScore } from '../services/scoreService'
 import { unlockFakeOrRealBadges, type Badge } from '../data/badges'
 import { BadgeUnlockModal } from '../components/badges/BadgeUnlockModal'
-import { BASE_URL } from '../services/api'
 
 import fakeImg1 from '../assets/fakeOrReal_IMG1.jpeg'
 import fakeImg4 from '../assets/FakeOrReal_IMG4.jpeg'
@@ -72,7 +71,7 @@ export default function FakeOrReal() {
 
   const fetchLeaderboard = async () => {
     try {
-      const res = await fetch(`${BASE_URL}/scores?module=fake_or_real`)
+      const res = await fetch('/scores?module=fake_or_real')
       const data = await res.json()
       setLeaderboard(data.scores || [])
     } catch (e) {

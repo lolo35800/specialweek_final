@@ -103,6 +103,52 @@ export type Database = {
           duration_s?: number | null
         }
       }
+      challenges: {
+        Row: {
+          id: string
+          creator_id: string
+          title: string
+          type: 'quiz' | 'fake_or_real'
+          join_code: string
+          config: Record<string, unknown>
+          status: 'open' | 'closed'
+          created_at: string
+        }
+        Insert: {
+          creator_id: string
+          title: string
+          type: 'quiz' | 'fake_or_real'
+          join_code: string
+          config?: Record<string, unknown>
+        }
+        Update: {
+          title?: string
+          status?: 'open' | 'closed'
+          config?: Record<string, unknown>
+        }
+      }
+      challenge_participations: {
+        Row: {
+          id: string
+          challenge_id: string
+          user_id: string
+          score: number | null
+          total: number | null
+          duration_s: number | null
+          completed_at: string | null
+          joined_at: string
+        }
+        Insert: {
+          challenge_id: string
+          user_id: string
+        }
+        Update: {
+          score?: number
+          total?: number
+          duration_s?: number
+          completed_at?: string
+        }
+      }
     }
   }
 }
@@ -130,3 +176,5 @@ export type Profile = Database['public']['Tables']['profiles']['Row']
 export type Post = Database['public']['Tables']['posts']['Row']
 export type Like = Database['public']['Tables']['likes']['Row']
 export type PlaySession = Database['public']['Tables']['play_sessions']['Row']
+export type Challenge = Database['public']['Tables']['challenges']['Row']
+export type ChallengeParticipation = Database['public']['Tables']['challenge_participations']['Row']

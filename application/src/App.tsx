@@ -22,6 +22,8 @@ import EditProfile from './pages/EditProfile'
 import NotFound from './pages/NotFound'
 import ActusPage from './pages/ActusPage'
 import Leaderboard from './pages/Leaderboard'
+import ChallengePlay from './pages/ChallengePlay'
+import ChallengeResults from './pages/ChallengeResults'
 
 export default function App() {
   return (
@@ -48,6 +50,8 @@ export default function App() {
             <Route path="detector" element={<Detector />} />
             <Route path="jouer/spot-the-zone" element={<SpotTheZone />} />
             <Route path="jouer/incoherences" element={<FindInconsistencies />} />
+            <Route path="challenge/:id" element={<ChallengePlay />} />
+            <Route path="challenge/:id/resultats" element={<ChallengeResults />} />
             <Route path="regles" element={<ReglesAntiDesinfo />} />
             <Route path="*" element={<NotFound />} />
           </Route>
