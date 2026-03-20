@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
 import './ActusPage.css'
 import { ACTUS, type Actu } from '../data/actus'
-import { BASE_URL } from '../services/api'
 
 export default function ActusPage() {
   const [actus, setActus] = useState<Actu[]>(ACTUS)
   const [aiSummary, setAiSummary] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [loadingSummary, setLoadingSummary] = useState(true)
-  
+
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('Toutes')
   const [sortOrder, setSortOrder] = useState('recent')
@@ -16,12 +15,9 @@ export default function ActusPage() {
   const [selectedActu, setSelectedActu] = useState<Actu | null>(null)
 
   useEffect(() => {
-    // 1. Fetch search data
-    fetch(`${BASE_URL}/actus`)
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
-        return res.json()
-      })
+    // 1. Fetch actus from API
+    fetch('/actus')
+      .then(res => res.json())
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
           setActus(data)
@@ -37,7 +33,7 @@ export default function ActusPage() {
       })
 
     // 2. Fetch AI summary
-    fetch(`${BASE_URL}/actus-summary`)
+    fetch('/actus-summary')
       .then(res => res.json())
       .then(data => {
         if (data.summary) setAiSummary(data.summary)

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ACTUS, type Actu } from '../data/actus'
 import { CLES } from '../data/cles'
-import { BASE_URL } from '../services/api'
 import './Home.css'
 
 const JEUX = [
@@ -31,7 +30,7 @@ export default function Home() {
   const [selectedActu, setSelectedActu] = useState<Actu | null>(null)
 
   useEffect(() => {
-    fetch(`${BASE_URL}/actus`)
+    fetch('/actus')
       .then(res => res.json())
       .then(data => {
         if (data && data.length > 0) {

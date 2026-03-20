@@ -13,6 +13,22 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
+      '/actus': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/actus-summary': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/quiz': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/scores': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
     },
   },
 })
